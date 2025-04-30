@@ -141,8 +141,7 @@ export const PersonDataScreen = ({ data, loading, error }) => {
         </Picker>
       </View>
 
-      <View ref={viewRef} style={{ width: "100%", backgroundColor: "#fff" }}>
-        <ScrollView>
+        <ScrollView ref={viewRef} style={{ width: "100%" }}>
           {personData && (
             <View style={styles.tableContainer}>
               <View style={styles.tableRow}>
@@ -151,6 +150,10 @@ export const PersonDataScreen = ({ data, loading, error }) => {
                   {selectedPerson.charAt(0).toUpperCase() +
                     selectedPerson.slice(1)}
                 </Text>
+                      </View>
+                      <View style={styles.tableRow}>
+                <Text style={styles.cell}>Month</Text>
+                <Text style={styles.cell}>{data.basicData.month}</Text>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.cell}>Total Meal</Text>
@@ -193,7 +196,6 @@ export const PersonDataScreen = ({ data, loading, error }) => {
             </View>
           )}
         </ScrollView>
-      </View>
 
       <TouchableOpacity onPress={captureView} style={styles.downloadButton}>
         <Text style={styles.downloadButtonText}>Download</Text>

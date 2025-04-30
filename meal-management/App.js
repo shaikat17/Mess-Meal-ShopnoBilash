@@ -74,6 +74,7 @@ const App = () => {
     "Nov 25",
     "Dec 25",
   ]);
+  
 
   
 
@@ -83,6 +84,10 @@ const App = () => {
   const apiUrl = "https://meal-manage-back.vercel.app/sheets?sheetName="; // Replace with your actual API endpoint
 
   useEffect(() => {
+
+    if(!selectedSheet || selectedSheet === "Select Sheet") {
+      return;
+    }
     const fetchData = async () => {
       setLoading(true);
       setError(null);
