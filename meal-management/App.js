@@ -24,11 +24,13 @@ const App = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedSheet, setSelectedSheet] = useState("Select Sheet");
+    const [sheets, setSheets] = useState(["Select Sheet", "April 25", "May 25"]);
 
   // Replace with your actual API endpoint
   // http://192.168.1.11:5000/sheets
   // const apiUrl = "http://192.168.79.151:5000/sheets";
-  const apiUrl = "https://meal-manage-back.vercel.app/sheets";
+  const apiUrl = "https://meal-manage-back.vercel.app/sheets?sheetName="; // Replace with your actual API endpoint
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +39,8 @@ const App = () => {
 
       try {
         console.log("Fetching data from API:", apiUrl); // Debug: Print the URL
-        const response = await fetch(apiUrl);
+        const response = await fetch(`${apiUrl}${selectedSheet}`);
+        console.log("API response status:", response.data); // Debug: Print the response status
         
         if (!response.ok) {
           const errorText = await response.text(); // Get error message
@@ -58,7 +61,7 @@ const App = () => {
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, [selectedSheet]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -93,7 +96,7 @@ const App = () => {
           })}
         >
           <Tab.Screen name="Home">
-            {() => <HomeScreen data={data} loading={loading} error={error} />}
+            {() => <HomeScreen data={data} loading={loading} error={error} sheets={sheets} setSelectedSheet={setSelectedSheet} selectedSheet={selectedSheet} />}
           </Tab.Screen>
           <Tab.Screen name="Person Data">
             {() => (
@@ -112,6 +115,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? Constants.statusBarHeight : 0, // Adjust for Android status bar
+    backgroundColor: "#FFDEDE",
   },
   noContainer: {
     flex: 1,

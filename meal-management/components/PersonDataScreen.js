@@ -1,7 +1,8 @@
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
+import * as MediaLibrary from 'expo-media-library';
 
 export const PersonDataScreen = ({ data, loading, error }) => {
     const [selectedPerson, setSelectedPerson] = useState('Select Person');
@@ -18,9 +19,17 @@ export const PersonDataScreen = ({ data, loading, error }) => {
             const permission = await MediaLibrary.requestPermissionsAsync();
             if (permission.granted) {
                 const asset = await MediaLibrary.createAssetAsync(uri);
-                console.log("Image saved to gallery:", asset);
+                Alert.alert(
+                    "Image Saved",
+                    "The image has been saved to your gallery.",
+                    [{ text: "OK" }]
+                );
             } else {
-                console.log("Permission to access media library denied");
+                Alert.alert(
+                    "Permission Denied",
+                    "You need to grant permission to access the media library.",
+                    [{ text: "OK" }]
+                );
             }
         } catch (error) {
             console.error("Error capturing view:", error);
@@ -78,7 +87,7 @@ export const PersonDataScreen = ({ data, loading, error }) => {
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Person Data</Text>
+                <Text style={styles.title}>{ selectedPerson === "Select Person" ? "Select Person" : "Data of " + selectedPerson.charAt(0).toUpperCase() + selectedPerson.slice(1) }</Text>
         </View>
         <View style={styles.pickerContainer}>
           <Picker
@@ -95,46 +104,60 @@ export const PersonDataScreen = ({ data, loading, error }) => {
           </Picker>
         </View>
   
-        <ScrollView ref={viewRef}>
-        {personData && (
-          <View style={styles.itemContainer}>
-          <Text style={styles.itemTitle}>
-             Name: {selectedPerson.charAt(0).toUpperCase() + selectedPerson.slice(1)}
-            </Text>
-            <Text style={styles.itemTitle}>
-            Extra Spend: {personData.extraSpend}
-          </Text>
-          <Text style={styles.itemTitle}>
-            Meal Cost: {personData.mealCost}
-          </Text>
-          <Text style={styles.itemTitle}>
-           House Wifi: {personData.houseWifi}
-          </Text>
-          <Text style={styles.itemTitle}>
-            Didi: {personData.didi}
-          </Text>
-          <Text style={styles.itemTitle}>
-            Total: {personData.total}
-          </Text>
-          <Text style={styles.itemTitle}>
-            Total Extra: {personData.totalExtra}
-          </Text>
-          <Text style={styles.itemTitle}>
-            Debit Credit: {personData.debitCredit}
-          </Text>
-          <Text style={styles.itemTitle}>
-            Total Meal: {personData.totalMeal}
-          </Text>
-          <Text style={styles.itemTitle}>
-            Total Bazar: {personData.totalBazar}
-              </Text>
-              
-        </View>
-                )}
-                
-            </ScrollView>
-            <TouchableOpacity onPress={captureView}>
-                    <Text style={styles.text}>Download</Text>
+        <ScrollView
+  ref={viewRef}
+  style={{ width: "100%", backgroundColor: "#fff" }}
+>
+  {personData && (
+    <View style={styles.tableContainer}>
+      <View style={styles.tableRow}>
+        <Text style={styles.cell}>Name</Text>
+        <Text style={styles.cell}>
+          {selectedPerson.charAt(0).toUpperCase() + selectedPerson.slice(1)}
+        </Text>
+                        </View>
+                        <View style={styles.tableRow}>
+        <Text style={styles.cell}>Total Meal</Text>
+        <Text style={styles.cell}>{personData.totalMeal}</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.cell}>Extra Cost</Text>
+        <Text style={styles.cell}>{personData.extraSpend}</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.cell}>Total Meal Cost</Text>
+        <Text style={styles.cell}>{personData.mealCost}</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.cell}>House and Wifi Cost</Text>
+        <Text style={styles.cell}>{personData.houseWifi}</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.cell}>Didi</Text>
+        <Text style={styles.cell}>{personData.didi}</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.cell}>Total Cost</Text>
+        <Text style={styles.cell}>{personData.total}</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={styles.cell}>Total Cost With Extra</Text>
+        <Text style={styles.cell}>{personData.totalExtra}</Text>
+      </View>
+      <View style={styles.tableRow}>
+                            <Text style={styles.cell}>{ personData.debitCredit <= 0 ? "Credit" : "Debit" }</Text>
+        <Text style={styles.cell}>{personData.debitCredit}</Text>
+                        </View>
+                        <View style={styles.tableRow}>
+        <Text style={styles.cell}>Total Bazar</Text>
+        <Text style={styles.cell}>{personData.totalBazar}</Text>
+      </View>
+    </View>
+  )}
+</ScrollView>
+
+            <TouchableOpacity onPress={captureView} style={styles.downloadButton}>
+                    <Text style={styles.downloadButtonText}>Download</Text>
                 </TouchableOpacity>
       </View>
     );
@@ -152,9 +175,9 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
       alignItems: "center",
-      paddingVertical: 20,
+      paddingVertical: 10,
       borderRadius: 10,
-      backgroundColor: "#FFDEDE",
+      backgroundColor: "#FF0B55",
       width: "90%",
       marginHorizontal: 20,
       marginTop: 20,
@@ -162,22 +185,24 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 28,
       fontWeight: "bold",
-      color: "#FF0B55",
+      color: "#fff",
     },
-    itemContainer: {
-      padding: 10,
-      marginTop: 10,
-    },
-    itemTitle: {
-      fontSize: 24,
-      marginBottom: 10,
-      color: "#333",
-      borderColor: "#FF0B55",
-      borderBottomWidth: 1,
-      paddingBottom: 5,
-      borderRadius: 15,
-      paddingLeft: 15,
-    },
+    tableContainer: {
+        margin: 16,
+        borderRadius: 8,
+      },
+      tableRow: {
+        flexDirection: "row",
+        borderBottomWidth: 1,
+        borderColor: "#FF0B55",
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        backgroundColor: "#fff",
+      },
+      cell: {
+        flex: 1,
+        fontSize: 16,
+      },
     loadingContainer: {
       flex: 1,
       justifyContent: "center",
@@ -217,5 +242,19 @@ const styles = StyleSheet.create({
     },
     picker: {
       flex: 1,
+    },
+    downloadButton: {
+      backgroundColor: "#FF0B55",
+      padding: 10,
+      borderRadius: 5,
+        marginTop: 20,
+      marginBottom: 20,
+      width: "90%",
+      alignItems: "center",
+    },
+    downloadButtonText: {
+      color: "#fff",
+      fontSize: 16,
+      fontWeight: "bold",
     },
   });

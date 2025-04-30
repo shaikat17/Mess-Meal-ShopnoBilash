@@ -60,8 +60,13 @@ async function getSheetData(sheetName, range) {
 
 // Express route to get data from Google Sheets
 app.get('/sheets', async (req, res) => {
+    const sheetName = req.query.sheetName; // e.g., "April 25"
+
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
     try {
-        const data = await getSheetData("April 25", "A1:R44"); //changed here
+        const data = await getSheetData(sheetName, "A1:R44"); //changed here
         const Mealdata = {
             "basicData": {
                 "month": data[0][6],
