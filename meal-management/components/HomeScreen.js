@@ -120,9 +120,9 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: "center",
-    paddingVertical: 20,
+    paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: "#FFDEDE",
+    backgroundColor: "#FF0B55",
     width: "90%",
     marginHorizontal: 20,
     marginTop: 20,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#FF0B55",
+    color: "#fff",
   },
 
   loadingContainer: {

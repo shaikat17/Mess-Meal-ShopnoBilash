@@ -38,10 +38,12 @@ export const PersonDataScreen = ({ data, loading, error }) => {
     
   
     useEffect(() => {
-      if (selectedPerson) {
-            setPersonData(data[selectedPerson]);
+        if (data && selectedPerson !== 'Select Person') {
+            const personData = data[selectedPerson];
+            setPersonData(personData);
         }
     }, [selectedPerson])
+
   
     if (loading) {
         return (
@@ -52,37 +54,35 @@ export const PersonDataScreen = ({ data, loading, error }) => {
         );
       }
     
-      if (error) {
+    //   if (error) {
+    //     return (
+    //       <View style={styles.errorContainer}>
+    //         <Text style={styles.errorText}>Error: {error.message}</Text>
+    //       </View>
+    //     );
+    //   }
+  
+      if ( error || !data || Object.keys(data).length === 0 || !personData) {
         return (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>Error: {error.message}</Text>
+          <View style={styles.noContainer}>
+            <Text style={styles.noDataText}>No Person Data Available</Text>
+            <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedPerson}
+              onValueChange={(itemValue) => {
+                setSelectedPerson(itemValue);
+              }}
+              style={styles.picker}
+            >
+              {personNames.map((personName) => (
+                
+                <Picker.Item key={personName} label={personName} value={personName} />
+              ))}
+            </Picker>
+          </View>
           </View>
         );
       }
-  
-    if (!data || Object.keys(data).length === 0 || !personData) {
-      return (
-        <View style={styles.noContainer}>
-          <Text style={styles.noDataText}>No Person Data Available</Text>
-          <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={selectedPerson}
-            onValueChange={(itemValue) => {
-              setSelectedPerson(itemValue);
-            }}
-            style={styles.picker}
-          >
-            {personNames.map((personName) => (
-              
-              <Picker.Item key={personName} label={personName} value={personName} />
-            ))}
-          </Picker>
-        </View>
-        </View>
-      );
-    }
-  
-  
   
     return (
       <View style={styles.container}>
