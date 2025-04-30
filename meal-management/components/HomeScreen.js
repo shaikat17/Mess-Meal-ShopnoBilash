@@ -3,6 +3,7 @@ import LottieView from "lottie-react-native";
 import { useState } from "react";
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,7 +16,9 @@ export const HomeScreen = ({
   error,
   sheets,
   selectedSheet,
-  setSelectedSheet,
+    setSelectedSheet,
+    handleRefresh,
+    refreshing,
 }) => {
   if (loading) {
     return (
@@ -79,7 +82,12 @@ export const HomeScreen = ({
           ))}
         </Picker>
       </View>
-      <ScrollView style={{ width: "100%" }}>
+          <ScrollView style={{ width: "100%" }} refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+            />
+      }>
         <View style={styles.tableContainer}>
           <View style={styles.tableRow}>
             <Text style={styles.cell}>Month</Text>

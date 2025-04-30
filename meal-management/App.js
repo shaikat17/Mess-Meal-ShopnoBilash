@@ -74,7 +74,11 @@ const App = () => {
     "Nov 25",
     "Dec 25",
   ]);
-  
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+  };
 
   
 
@@ -111,12 +115,13 @@ const App = () => {
         setError(error);
       } finally {
         setLoading(false);
+        setRefreshing(false); // Reset refreshing state
         console.log("Fetch completed"); // Debug: Print completion
       }
     };
 
     fetchData();
-  }, [selectedSheet]);
+  }, [selectedSheet, refreshing ]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -159,12 +164,14 @@ const App = () => {
                 sheets={sheets}
                 setSelectedSheet={setSelectedSheet}
                 selectedSheet={selectedSheet}
+                refreshing={refreshing}
+                handleRefresh={handleRefresh}
               />
             )}
           </Tab.Screen>
           <Tab.Screen name="Person Data">
             {() => (
-              <PersonDataScreen data={data} loading={loading} error={error} />
+              <PersonDataScreen data={data} loading={loading} error={error} refreshing={refreshing} handleRefresh={handleRefresh} />
             )}
           </Tab.Screen>
           <Tab.Screen name="Settings" component={SettingsScreen} />

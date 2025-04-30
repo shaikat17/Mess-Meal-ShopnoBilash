@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,7 +14,13 @@ import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
 import LottieView from "lottie-react-native";
 
-export const PersonDataScreen = ({ data, loading, error }) => {
+export const PersonDataScreen = ({
+  data,
+  loading,
+  error,
+  refreshing,
+  handleRefresh,
+}) => {
   const [selectedPerson, setSelectedPerson] = useState("Select Person");
   const [personData, setPersonData] = useState(null);
   const [personNames, setPersonNames] = useState([
@@ -60,9 +67,10 @@ export const PersonDataScreen = ({ data, loading, error }) => {
     }
     if (data && selectedPerson !== "Select Person") {
       const personData = data[selectedPerson];
-      setPersonData(personData);
+        setPersonData(personData);
+        console.log("Person Data:", personData);
     }
-  }, [selectedPerson]);
+  }, [selectedPerson, data]);
 
   if (loading) {
     return (
@@ -141,61 +149,67 @@ export const PersonDataScreen = ({ data, loading, error }) => {
         </Picker>
       </View>
 
-        <ScrollView ref={viewRef} style={{ width: "100%" }}>
-          {personData && (
-            <View style={styles.tableContainer}>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Name</Text>
-                <Text style={styles.cell}>
-                  {selectedPerson.charAt(0).toUpperCase() +
-                    selectedPerson.slice(1)}
-                </Text>
-                      </View>
-                      <View style={styles.tableRow}>
-                <Text style={styles.cell}>Month</Text>
-                <Text style={styles.cell}>{data.basicData.month}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Total Meal</Text>
-                <Text style={styles.cell}>{personData.totalMeal}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Extra Cost</Text>
-                <Text style={styles.cell}>{personData.extraSpend}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Total Meal Cost</Text>
-                <Text style={styles.cell}>{personData.mealCost}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>House and Wifi Cost</Text>
-                <Text style={styles.cell}>{personData.houseWifi}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Didi</Text>
-                <Text style={styles.cell}>{personData.didi}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Total Cost</Text>
-                <Text style={styles.cell}>{personData.total}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Total Cost With Extra</Text>
-                <Text style={styles.cell}>{personData.totalExtra}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>Total Bazar</Text>
-                <Text style={styles.cell}>{personData.totalBazar}</Text>
-              </View>
-              <View style={styles.tableRow}>
-                <Text style={styles.cell}>
-                  {personData.debitCredit <= 0 ? "Credit" : "Debit"}
-                </Text>
-                <Text style={styles.cell}>{personData.debitCredit}</Text>
-              </View>
+      <ScrollView
+        ref={viewRef}
+        style={{ width: "100%" }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
+        {personData && (
+          <View style={styles.tableContainer}>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Name</Text>
+              <Text style={styles.cell}>
+                {selectedPerson.charAt(0).toUpperCase() +
+                  selectedPerson.slice(1)}
+              </Text>
             </View>
-          )}
-        </ScrollView>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Month</Text>
+              <Text style={styles.cell}>{data.basicData.month}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Total Meal</Text>
+              <Text style={styles.cell}>{personData.totalMeal}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Extra Cost</Text>
+              <Text style={styles.cell}>{personData.extraSpend}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Total Meal Cost</Text>
+              <Text style={styles.cell}>{personData.mealCost}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>House and Wifi Cost</Text>
+              <Text style={styles.cell}>{personData.houseWifi}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Didi</Text>
+              <Text style={styles.cell}>{personData.didi}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Total Cost</Text>
+              <Text style={styles.cell}>{personData.total}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Total Cost With Extra</Text>
+              <Text style={styles.cell}>{personData.totalExtra}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>Total Bazar</Text>
+              <Text style={styles.cell}>{personData.totalBazar}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.cell}>
+                {personData.debitCredit <= 0 ? "Credit" : "Debit"}
+              </Text>
+              <Text style={styles.cell}>{personData.debitCredit}</Text>
+            </View>
+          </View>
+        )}
+      </ScrollView>
 
       <TouchableOpacity onPress={captureView} style={styles.downloadButton}>
         <Text style={styles.downloadButtonText}>Download</Text>
