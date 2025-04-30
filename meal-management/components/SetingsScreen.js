@@ -1,9 +1,15 @@
+import LottieView from "lottie-react-native";
 import { StyleSheet, Text, View } from "react-native";
 
 export const SettingsScreen = () => {
   return (
     <View style={styles.noContainer}>
-      <Text>Comming soon</Text>
+      <LottieView
+              source={require('../assets/json/comming.json')} // your .json file
+              autoPlay
+              loop
+              style={{ width: 200, height: 200 }}
+            />
     </View>
   );
 };

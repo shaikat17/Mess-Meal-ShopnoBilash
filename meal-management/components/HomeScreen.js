@@ -1,4 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
+import LottieView from "lottie-react-native";
 import { useState } from "react";
 import {
   ActivityIndicator,
@@ -35,7 +36,13 @@ export const HomeScreen = ({
 
   if (error || !data || !data.basicData) {
     return (
-      <View style={styles.noContainer}>
+        <View style={styles.noContainer}>
+             <LottieView
+                    source={require('../assets/json/notfound.json')} // your .json file
+                    autoPlay
+                    loop
+                    style={{ width: 200, height: 200 }}
+                  />
         <Text style={styles.noDataText}>No Basic Data Available</Text>
         <View style={styles.pickerContainer}>
           <Picker

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from 'expo-media-library';
+import LottieView from 'lottie-react-native';
 
 export const PersonDataScreen = ({ data, loading, error }) => {
     const [selectedPerson, setSelectedPerson] = useState('Select Person');
@@ -64,8 +65,14 @@ export const PersonDataScreen = ({ data, loading, error }) => {
   
       if ( error || !data || Object.keys(data).length === 0 || !personData) {
         return (
-          <View style={styles.noContainer}>
-            <Text style={styles.noDataText}>No Person Data Available</Text>
+            <View style={styles.noContainer}>
+                <LottieView
+        source={require('../assets/json/notfound.json')} // your .json file
+        autoPlay
+        loop
+        style={{ width: 200, height: 200 }}
+      />
+            <Text style={styles.noDataText}>Select a Person to view data</Text>
             <View style={styles.pickerContainer}>
             <Picker
               selectedValue={selectedPerson}
