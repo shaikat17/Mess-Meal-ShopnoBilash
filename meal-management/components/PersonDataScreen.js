@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useRef, useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from 'expo-media-library';
 
