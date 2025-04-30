@@ -16,6 +16,7 @@ export const PersonDataScreen = ({ data, loading, error }) => {
             const uri = await captureRef(viewRef, {
                 format: "png",
                 quality: 0.8,
+                fileName: data?.basicData.month + " " + selectedPerson,
             });
             const permission = await MediaLibrary.requestPermissionsAsync();
             if (permission.granted) {
