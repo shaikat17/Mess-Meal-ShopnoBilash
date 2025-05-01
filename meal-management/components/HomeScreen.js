@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     color: "#888",
     textAlign: "center",
   },
+  
   pickerContainer: {
     width: 200,
     height: 50,
@@ -189,16 +190,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tableContainer: {
-    margin: 16,
     borderRadius: 8,
+    margin: 16,
   },
   tableRow: {
     flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#FF0B55",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    justifyContent: "space-between",
+    padding: 8,
     backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#FF0B55",
   },
   cell: {
     flex: 1,

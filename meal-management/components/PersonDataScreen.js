@@ -68,7 +68,6 @@ export const PersonDataScreen = ({
     if (data && selectedPerson !== "Select Person") {
       const personData = data[selectedPerson];
         setPersonData(personData);
-        console.log("Person Data:", personData);
     }
   }, [selectedPerson, data]);
 
