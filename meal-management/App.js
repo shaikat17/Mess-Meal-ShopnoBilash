@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
   Platform,
   SafeAreaView,
 } from "react-native";
@@ -13,16 +9,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons"; // Import icons
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants"; // Import Constants for status bar height
-import { Picker } from "@react-native-picker/picker";
 import { HomeScreen } from "./components/HomeScreen";
-import { SettingsScreen, SettingsStack } from "./components/SettingsScreen";
+import { SettingsStack } from "./components/SettingsScreen";
 import { PersonDataScreen } from "./components/PersonDataScreen";
 
 const Tab = createBottomTabNavigator();
 
-
 const App = () => {
-
   // Date functionality
   const monthsNames = [
     "Jan",
@@ -42,10 +35,9 @@ const App = () => {
   const year = today.getFullYear();
   const lastTwoDigits = String(year).substring(2);
   const currentMonth = today.getMonth(); // Months are 0-indexed
-  
+
   const currentData = monthsNames[currentMonth];
   const currentSheet = `${currentData} ${lastTwoDigits}`;
-  
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -81,16 +73,13 @@ const App = () => {
     setRefreshing(true);
   };
 
-  
-
   // Replace with your actual API endpoint
   // http://192.168.1.11:5000/sheets
   // const apiUrl = "http://192.168.79.151:5000/sheets";
   const apiUrl = "https://meal-manage-back.vercel.app/sheets?sheetName="; // Replace with your actual API endpoint
 
   useEffect(() => {
-
-    if(!selectedSheet || selectedSheet === "Select Sheet") {
+    if (!selectedSheet || selectedSheet === "Select Sheet") {
       return;
     }
     const fetchData = async () => {
@@ -122,7 +111,7 @@ const App = () => {
     };
 
     fetchData();
-  }, [selectedSheet, refreshing ]);
+  }, [selectedSheet, refreshing]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -172,10 +161,18 @@ const App = () => {
           </Tab.Screen>
           <Tab.Screen name="Person Data">
             {() => (
-              <PersonDataScreen data={data} loading={loading} error={error} refreshing={refreshing} handleRefresh={handleRefresh} />
+              <PersonDataScreen
+                data={data}
+                loading={loading}
+                error={error}
+                refreshing={refreshing}
+                handleRefresh={handleRefresh}
+              />
             )}
           </Tab.Screen>
-          <Tab.Screen name="Settings" component={SettingsStack} />
+          <Tab.Screen name="Settings">
+            {() => <SettingsStack data={data} refreshing={refreshing} handleRefresh={handleRefresh} loading={loading} />}
+          </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
