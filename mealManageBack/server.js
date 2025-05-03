@@ -58,6 +58,43 @@ async function getSheetData(sheetName, range) {
     }
 }
 
+// all data
+app.get('/sheets/all', async (req, res) => {
+    const sheetName = req.query.sheetName; // e.g., "April 25"
+    const range = req.query.range || "A1:R44"; // Default range if not provided
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
+    try {
+        const data = await getSheetData(sheetName, range);
+        res.json(data); // Send the data as JSON
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve data from Google Sheets' });
+    }
+});
+// Get the list of sheets in the spreadsheet
+app.get('/sheets/list', async (req, res) => {
+    const auth = new JWT({
+        email: credentials.client_email,
+        key: credentials.private_key,
+        scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+    });
+
+    try {
+        // const authClient = await auth.getClient();
+        const sheets = google.sheets({ version: 'v4', auth});
+
+        const response = await sheets.spreadsheets.get({
+            spreadsheetId,
+        }); 
+        const sheetsList = response.data.sheets.map(sheet => sheet.properties.title);
+        res.json(sheetsList); // Send the list of sheets as JSON
+    } catch (error) {
+        console.error('Error fetching sheet list:', error);
+        res.status(500).json({ error: 'Failed to retrieve sheet list from Google Sheets' });
+    }
+});
+
 // Express route to get data from Google Sheets
 app.get('/sheets', async (req, res) => {
     const sheetName = req.query.sheetName; // e.g., "April 25"

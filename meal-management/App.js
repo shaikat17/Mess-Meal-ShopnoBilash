@@ -15,10 +15,11 @@ import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants"; // Import Constants for status bar height
 import { Picker } from "@react-native-picker/picker";
 import { HomeScreen } from "./components/HomeScreen";
-import { SettingsScreen } from "./components/SetingsScreen";
+import { SettingsScreen, SettingsStack } from "./components/SettingsScreen";
 import { PersonDataScreen } from "./components/PersonDataScreen";
 
 const Tab = createBottomTabNavigator();
+
 
 const App = () => {
 
@@ -174,7 +175,7 @@ const App = () => {
               <PersonDataScreen data={data} loading={loading} error={error} refreshing={refreshing} handleRefresh={handleRefresh} />
             )}
           </Tab.Screen>
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Settings" component={SettingsStack} />
         </Tab.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
