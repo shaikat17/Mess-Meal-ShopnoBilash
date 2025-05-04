@@ -35,7 +35,7 @@ export const AddMeal = () => {
       Alert.alert("Error", "Please enter a name.");
       return;
     }
-    if (!numOfMeal || numOfMeal <= 0) {
+    if (!numOfMeal || numOfMeal < 0) {
       Alert.alert("Error", "Please enter a valid number of meals.");
       return;
     }
