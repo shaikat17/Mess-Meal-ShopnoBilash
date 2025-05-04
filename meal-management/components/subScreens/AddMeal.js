@@ -35,7 +35,8 @@ export const AddMeal = () => {
       Alert.alert("Error", "Please enter a name.");
       return;
     }
-    if (!numOfMeal || numOfMeal < 0) {
+        console.log(numOfMeal)
+    if (numOfMeal < 0) {
       Alert.alert("Error", "Please enter a valid number of meals.");
       return;
     }
@@ -57,6 +58,7 @@ export const AddMeal = () => {
           setLoading(false);
       } catch (error) {
           console.error(error);
+          Alert.alert("Error", error.error, [{ text: "OK" }]);
           setLoading(false);
       }
     setDate(new Date());
@@ -130,7 +132,6 @@ export const AddMeal = () => {
             onValueChange={(itemValue) => setName(itemValue)}
             style={styles.picker}
           >
-            <Picker.Item label="Select a person" value="" />
             {personNames.map((person) => (
               <Picker.Item key={person} label={person} value={person} />
             ))}

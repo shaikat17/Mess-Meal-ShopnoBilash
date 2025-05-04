@@ -197,7 +197,7 @@ router.post('/addmeal', async (req, res) => {
     if (!sheetName) {
         return res.status(400).json({ error: "Sheet name is required." });
     }
-    if(numOfMeal <= 0){
+    if(numOfMeal < 0){
         return res.status(400).json({ error: "Number of Meals should be greater than zero." });
     }
     
@@ -223,7 +223,7 @@ router.post('/addmeal', async (req, res) => {
         const formattedAmount = parseFloat(numOfMeal);
 
         await writeSheetData(sheetName, cell, [[formattedAmount]]);
-        
+
         res.json({ success: true, message: `Number of Meals for ${name} on ${date} updated to ${numOfMeal}` });
     } catch (error) {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
