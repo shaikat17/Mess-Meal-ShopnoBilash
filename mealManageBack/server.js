@@ -68,8 +68,8 @@ async function writeSheetData(sheetName, range, values) {
     try {
         const sheets = google.sheets({ version: 'v4', auth });
 
-        console.log("Updating range:", `${sheetName}!${range}`);
-        console.log("With values:", values);
+        // console.log("Updating range:", `${sheetName}!${range}`);
+        // console.log("With values:", values);
 
         const response = await sheets.spreadsheets.values.update({
             spreadsheetId,
@@ -80,7 +80,7 @@ async function writeSheetData(sheetName, range, values) {
             },
         });
 
-        console.log("Update response:", response.data);
+        // console.log("Update response:", response.data);
     } catch (error) {
         console.error("Error during writeSheetData:", error.response?.data || error.message);
     }
@@ -238,11 +238,11 @@ app.post('/sheets/extra', async (req, res) => {
 
     const { name, amount } = req.body;
 
+    // console.log("Received data:", req.body);
+    // console.log("Sheet name:", sheetName);
+
     if (!sheetName) {
         return res.status(400).json({ error: "Sheet name is required." });
-    }
-    if (!name || !amount) {
-        return res.status(400).json({ error: "Name and amount are required." });
     }
 
     const data = await getSheetData(sheetName, "B2:B7");
@@ -250,7 +250,7 @@ app.post('/sheets/extra', async (req, res) => {
 
     const rowIndex = flatNames.findIndex(n => n.toLowerCase() === name.toLowerCase());
 
-    console.log(rowIndex)
+    // console.log(rowIndex)
 
     if (rowIndex === -1) {
         return res.status(404).json({ error: "Name not found in the sheet." });
@@ -259,13 +259,9 @@ app.post('/sheets/extra', async (req, res) => {
     const sheetRow = rowIndex + 2;
     const formattedValue = parseFloat(amount);
 
-
-    console.log(`Writing "${formattedValue}" to ${sheetName}!C${sheetRow}`);
-
-
     await writeSheetData(sheetName, `C${sheetRow}`, [[formattedValue]]);
 
-    res.status(200).json({ message: "Data written successfully." });
+    res.status(200).json({ message: "Money added successfully." });
 });
 
 

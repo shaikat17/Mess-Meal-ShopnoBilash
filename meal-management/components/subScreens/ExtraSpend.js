@@ -1,9 +1,18 @@
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+    Alert,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useState } from "react";
 import { useDataContext } from "../../context/DataContext";
 
 export const ExtraSpend = () => {
-  const { data, loading, error, apiUrl } = useDataContext();
+  const { data, loading, error, apiUrl, selectedSheet, refreshing, handleRefresh } = useDataContext();
 
   const [extraSpends, setExtraSpends] = useState({
     shaikat: data?.shaikat?.extraSpend?.toString() || "",
@@ -20,25 +29,34 @@ export const ExtraSpend = () => {
       [name]: value,
     }));
   };
-    
+
     const handleUpdate = async (name) => {
-        try {
-            const response = await fetch(`${apiUrl}/sheets/extra`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    amount: extraSpends[name],
-                }),
-            });
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    const amount = parseFloat(extraSpends[name]);
+  
+    if (isNaN(amount)) {
+        console.warn("Invalid amount for", name);
+        Alert.alert("Invalid Amount", "Please enter a valid amount. Like 1000, 520", [
+          { text: "OK" },
+        ]);
+      return;
+    }
+  
+    try {
+      const response = await fetch(`${apiUrl}/extra?sheetName=${selectedSheet}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, amount }),
+      });
+      const data = await response.json();
+        console.log(data);
+      Alert.alert("Success", data.message, [{ text: "OK" }]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
 
   if (loading) {
     return (
@@ -72,12 +90,12 @@ export const ExtraSpend = () => {
         </Text>
       </View>
 
-      <ScrollView style={{ width: "100%" }}>
+      <ScrollView style={{ width: "100%" }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
         <View style={styles.tableContainer}>
           <View style={styles.tableRow}>
             <Text style={[styles.cell, styles.boldCell]}>Name</Text>
-                      <Text style={[styles.cell, styles.boldCell]}>Amount</Text>
-                      <Text style={[styles.cell, styles.boldCell]}>Action</Text>
+            <Text style={[styles.cell, styles.boldCell]}>Amount</Text>
+            <Text style={[styles.cell, styles.boldCell]}>Action</Text>
           </View>
 
           {["shaikat", "ajoy", "pranto", "shanto", "somir", "himel"].map(
@@ -92,14 +110,18 @@ export const ExtraSpend = () => {
                   value={extraSpends[name]}
                   onChangeText={(text) => handleChange(name, text)}
                   placeholder="Enter amount"
-                      />
-                      <TouchableOpacity style={[styles.cell, styles.updateBtn]}
-                      onPress={() => handleUpdate(name)}><Text style={styles.updateBtnText}>Update</Text></TouchableOpacity>
+                />
+                <TouchableOpacity
+                  style={[styles.cell, styles.updateBtn]}
+                  onPress={() => handleUpdate(name)}
+                >
+                  <Text style={styles.updateBtnText}>Update</Text>
+                </TouchableOpacity>
               </View>
             )
           )}
         </View>
-          </ScrollView>
+      </ScrollView>
 
       {/* <View style={styles.titleContainer}>
         <Text style={styles.title}>Add Extra Spend</Text>
@@ -159,18 +181,17 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     fontSize: 16,
     textAlign: "center",
-    },
+  },
   updateBtn: {
     backgroundColor: "#03A791",
     padding: 6,
     borderRadius: 5,
     alignItems: "center",
-      justifyContent: "center",
+    justifyContent: "center",
     marginLeft: 10,
-    },
+  },
   updateBtnText: {
     color: "#fff",
     fontSize: 16,
   },
-  
 });
