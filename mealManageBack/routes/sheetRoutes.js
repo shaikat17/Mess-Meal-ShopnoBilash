@@ -183,15 +183,46 @@ router.get('/names', async (req, res) => {
 // Route to add meal
 router.post('/addmeal', async (req, res) => {
     const sheetName = req.query.sheetName;
+    const { date, name, numOfMeal } = req.body;
 
+    const columnIndex = {
+        0: "B",
+        1: "C",
+        2: "D",
+        3: "E",
+        4: "F",
+        5: "G",
+    }
     if (!sheetName) {
         return res.status(400).json({ error: "Sheet name is required." });
     }
-
+    if(numOfMeal <= 0){
+        return res.status(400).json({ error: "Number of Meals should be greater than zero." });
+    }
+    
     try {
-        const data = await getSheetData(sheetName, "L2:L7");
-        const names = data.flat(); // Or: data.map(row => row[0]);
-        res.json(names);
+        const result1 = await getSheetData(sheetName, "A12:A42");
+        const dates = result1.flat();
+
+        const result2 = await getSheetData(sheetName, "B11:G42");
+        const names = result2[0].flat();
+
+        console.log(date, name, numOfMeal);
+
+        const dateIndex = dates.findIndex(d => d.toLowerCase() === date.toLowerCase());
+
+        const nameIndex = names.findIndex(n => n.toLowerCase() === name.toLowerCase());
+
+        if (dateIndex === -1 || nameIndex === -1) {
+            return res.status(404).json({ error: "Date or Name not found in sheet." });
+        }
+        // const names = data.flat(); // Or: data.map(row => row[0]);
+
+        const cell = `${columnIndex[nameIndex]}${dateIndex + 12}`;
+        const formattedAmount = parseFloat(numOfMeal);
+
+        await writeSheetData(sheetName, cell, [[formattedAmount]]);
+        res.json({ success: true, message: `Number of Meals for ${name} on ${date} updated to ${numOfMeal}` });
     } catch (error) {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
     }
