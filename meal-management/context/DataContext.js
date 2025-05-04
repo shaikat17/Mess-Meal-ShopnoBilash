@@ -6,9 +6,10 @@ export const DataProvider = ({ children }) => {
   // Main App Functionality Start
   const [sheets, setSheets] = useState([]);
   // Replace with your actual API endpoint
-  // http://192.168.1.11:5000/sheets
+    const apiUrl = "http://192.168.1.11:5000/sheets"
+      
   // const apiUrl = "http://192.168.79.151:5000/sheets";
-  const apiUrl = "https://meal-manage-back.vercel.app/sheets"; // Replace with your actual API endpoint
+//   const apiUrl = "https://meal-manage-back.vercel.app/sheets"; // Replace with your actual API endpoint
 
   useEffect(() => {
     const fetchSheets = async () => {
@@ -224,7 +225,8 @@ export const DataProvider = ({ children }) => {
         personData,
         personNames,
         selectedPerson,
-        setSelectedPerson,
+              setSelectedPerson,
+        apiUrl,
       }}
     >
       {children}

@@ -58,6 +58,31 @@ async function getSheetData(sheetName, range) {
     }
 }
 
+async function writeSheetData(sheetName, range, values) {
+    const auth = new JWT({
+        email: credentials.client_email,
+        key: credentials.private_key,
+        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
+
+    try {
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const response = await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: `${sheetName}!${range}`,
+            valueInputOption: 'RAW',
+            resource: {
+                values,
+            },
+        });
+
+        console.log(`Data written to sheet "${sheetName}", range "${range}":`, response.data);
+    } catch (error) {
+        console.error(`Error writing data to sheet "${sheetName}", range "${range}":`, error);
+    }
+}
+
 // all data
 app.get('/sheets/all', async (req, res) => {
     const sheetName = req.query.sheetName; // e.g., "April 25"
@@ -203,6 +228,38 @@ app.get('/sheets/names', async (req, res) => {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
     }
 });
+
+app.post('/sheets/extra', async (req, res) => {
+    const sheetName = req.query.sheetName;
+
+    const { name, amount } = req.body;
+
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
+    if (!name || !amount) {
+        return res.status(400).json({ error: "Name and amount are required." });
+    }
+
+    const data = await getSheetData(sheetName, "B2:B7");
+    const flatNames = data.flat();
+
+    const rowIndex = flatNames.findIndex(n => n.toLowerCase() === name.toLowerCase());
+
+    console.log(rowIndex)
+
+    if (rowIndex === -1) {
+        return res.status(404).json({ error: "Name not found in the sheet." });
+    }
+
+    const sheetRow = rowIndex + 2;
+    const formattedValue = `${parseFloat(amount).toFixed(2)}`;
+
+    await writeSheetData(sheetName, `C${sheetRow}`, [[formattedValue]]);
+    
+    res.status(200).json({ message: "Data written successfully." });
+});
+
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
