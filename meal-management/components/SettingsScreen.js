@@ -4,11 +4,11 @@ import { MonthSummary } from "./subScreens/MonthSummary";
 
 const Stack = createNativeStackNavigator();
 
-export function SettingsStack({ data, refreshing, handleRefresh, loading }) {
+export function SettingsStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SettingMain" component={SettingMain} />
-      <Stack.Screen name="monthsummary">{({props}) => <MonthSummary {...props} data={data} refreshing={refreshing} handleRefresh={handleRefresh} loading={loading} />}</Stack.Screen>
+      <Stack.Screen name="monthsummary" component={MonthSummary} />
     </Stack.Navigator>
   );
 }

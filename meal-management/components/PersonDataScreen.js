@@ -13,14 +13,10 @@ import {
 import { captureRef } from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
 import LottieView from "lottie-react-native";
+import { useDataContext } from "../context/DataContext";
 
-export const PersonDataScreen = ({
-  data,
-  loading,
-  error,
-  refreshing,
-  handleRefresh,
-}) => {
+export const PersonDataScreen = () => {
+  const { data, loading, error, refreshing, handleRefresh } = useDataContext();
   const [selectedPerson, setSelectedPerson] = useState("Select Person");
   const [personData, setPersonData] = useState(null);
   const [personNames, setPersonNames] = useState([

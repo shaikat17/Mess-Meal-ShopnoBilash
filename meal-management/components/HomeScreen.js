@@ -9,17 +9,18 @@ import {
   Text,
   View,
 } from "react-native";
+import { useDataContext } from "../context/DataContext";
 
-export const HomeScreen = ({
-  data,
-  loading,
-  error,
-  sheets,
-  selectedSheet,
+export const HomeScreen = () => {
+  const { data,
+    loading,
+    error,
+    sheets,
+    selectedSheet,
     setSelectedSheet,
     handleRefresh,
-    refreshing,
-}) => {
+    refreshing } = useDataContext();
+  
   if (loading) {
     return (
       <View style={styles.loadingContainer}>

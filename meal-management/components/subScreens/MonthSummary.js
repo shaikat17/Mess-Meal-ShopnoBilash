@@ -11,8 +11,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useDataContext } from "../../context/DataContext";
 
-export const MonthSummary = ({ data, refreshing, handleRefresh, loading }) => {
+export const MonthSummary = () => {
+  const { data, loading, error, refreshing, handleRefresh } = useDataContext();
   const [selectedValue, setSelectedValue] = useState("Bazar");
   const [values] = useState(["Bazar", "Meal", "Extra Spend", "Debit", "Total With Extra"]);
   const [selectedData, setSelectedData] = useState(null);
