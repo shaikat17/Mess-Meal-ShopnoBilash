@@ -127,7 +127,7 @@ const App = () => {
             tabBarLabelStyle: {
               fontSize: 12,
             },
-            tabBarActiveTintColor: "#FF0B55", // Active tab color
+            tabBarActiveTintColor: "#03A791", // Active tab color
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
 
@@ -142,7 +142,7 @@ const App = () => {
               // You can return any component that you like here!
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarInactiveTintColor: "gray", // Color of inactive tab icon and label
+            tabBarInactiveTintColor: "#808080", // Color of inactive tab icon and label
           })}
         >
           <Tab.Screen name="Home">
@@ -186,83 +186,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? Constants.statusBarHeight : 0, // Adjust for Android status bar
     backgroundColor: "#FFDEDE",
   },
-  noContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-  },
-  titleContainer: {
-    alignItems: "center",
-    paddingVertical: 20,
-    borderRadius: 10,
-    backgroundColor: "#FFDEDE",
-    width: "90%",
-    marginHorizontal: 20,
-    marginTop: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FF0B55",
-  },
-  itemContainer: {
-    padding: 10,
-    marginTop: 10,
-  },
-  itemTitle: {
-    fontSize: 24,
-    marginBottom: 10,
-    color: "#333",
-    borderColor: "#FF0B55",
-    borderBottomWidth: 1,
-    paddingBottom: 5,
-    borderRadius: 15,
-    paddingLeft: 15,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffe0e0",
-    padding: 20,
-  },
-  errorText: {
-    color: "#ff0000",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  text: {
-    margin: 6,
-    fontSize: 14,
-  },
-  noDataText: {
-    margin: 10,
-    fontSize: 16,
-    fontStyle: "italic",
-    color: "#888",
-    textAlign: "center",
-  },
-  pickerContainer: {
-    width: 200,
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#C1C0B9",
-    borderRadius: 4,
-    marginBottom: 20,
-    marginTop: 10,
-  },
-  picker: {
-    flex: 1,
-  },
+  
 });
 
 export default App;

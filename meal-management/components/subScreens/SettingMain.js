@@ -22,7 +22,7 @@ export const SettingMain = () => {
       {/* Header with Back Button and Title */}
       <View style={styles.headerRow}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="#007AFF" />
+        <Ionicons name="arrow-back" size={24} color="#fff" />
         </Pressable>
 
         <View style={styles.titleWrapper}>
@@ -61,24 +61,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F9FAFB",
-    paddingTop: 60,
-    paddingHorizontal: 20,
   },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    backgroundColor: "#03A791",
+    borderEndEndRadius: 10,
+    borderBottomStartRadius: 10,
   },
   backButton: {
     padding: 5,
     width: 80,
-      alignItems: "flex-start",
-  },
-  backText: {
-    fontSize: 20,
-    color: "#007AFF",
+    alignItems: "flex-start",
+    marginLeft: 15,
   },
   titleWrapper: {
     flex: 1,
@@ -87,6 +85,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "#fff",
   },
   lottie: {
     width: 150,
@@ -96,6 +95,7 @@ const styles = StyleSheet.create({
   },
   linksContainer: {
     paddingBottom: 40,
+    marginHorizontal: 20,
   },
   featureButton: {
     backgroundColor: "#ffffff",

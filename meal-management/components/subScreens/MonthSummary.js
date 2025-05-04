@@ -198,20 +198,19 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
       },
-  titleContainer: {
-    alignItems: "center",
-    paddingVertical: 10,
-    borderRadius: 10,
-    backgroundColor: "#FF0B55",
-    width: "90%",
-    marginHorizontal: 20,
-    marginTop: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-  },
+      titleContainer: {
+        alignItems: "center",
+        paddingVertical: 10,
+        backgroundColor: "#03A791",
+        width: "100%",
+        borderEndEndRadius: 10,
+        borderBottomStartRadius: 10,
+      },
+      title: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#fff",
+      },
   noDataText: {
     margin: 10,
     fontSize: 16,
@@ -225,11 +224,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#C1C0B9",
     borderRadius: 4,
-    marginBottom: 20,
+    marginBottom: 10,
     marginTop: 10,
   },
   picker: {
     flex: 1,
+    color: "#808080",
+    fontSize: 16,
   },
   tableContainer: {
     borderRadius: 8,
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   backButton: {
-    backgroundColor: "#FF0B55",
+    backgroundColor: "#03A791",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
