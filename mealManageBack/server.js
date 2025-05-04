@@ -169,7 +169,7 @@ app.get('/sheets', async (req, res) => {
                 "totalMeal": data[42][5],
                 "totalBazar": data[31][13],
             },
-            "Somir": {
+            "somir": {
                 "extraSpend": data[5][2],
                 "mealCost": data[4][12],
                 "houseWifi": data[4][13],
@@ -184,6 +184,23 @@ app.get('/sheets', async (req, res) => {
         res.json(Mealdata); // Send the data as JSON
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve data from Google Sheets' });
+    }
+});
+
+app.get('/sheets/names', async (req, res) => {
+    console.log('Hello from /sheets/names');
+    const sheetName = req.query.sheetName;
+
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
+
+    try {
+        const data = await getSheetData(sheetName, "L2:L7");
+        const names = data.flat(); // Or: data.map(row => row[0]);
+        res.json(names);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
     }
 });
 

@@ -16,18 +16,7 @@ import LottieView from "lottie-react-native";
 import { useDataContext } from "../context/DataContext";
 
 export const PersonDataScreen = () => {
-  const { data, loading, error, refreshing, handleRefresh } = useDataContext();
-  const [selectedPerson, setSelectedPerson] = useState("Select Person");
-  const [personData, setPersonData] = useState(null);
-  const [personNames, setPersonNames] = useState([
-    "Select Person",
-    "shaikat",
-    "ajoy",
-    "shanto",
-    "himel",
-    "pranto",
-    "Somir",
-  ]);
+  const { data, loading, error, refreshing, handleRefresh, selectedPerson, setSelectedPerson, personData, personNames } = useDataContext();
   const viewRef = useRef(null);
 
   const captureView = async () => {
@@ -56,16 +45,6 @@ export const PersonDataScreen = () => {
       console.error("Error capturing view:", error);
     }
   };
-
-  useEffect(() => {
-    if (selectedPerson === "Select Person") {
-      setPersonData(null);
-    }
-    if (data && selectedPerson !== "Select Person") {
-      const personData = data[selectedPerson];
-        setPersonData(personData);
-    }
-  }, [selectedPerson, data]);
 
   if (loading) {
     return (

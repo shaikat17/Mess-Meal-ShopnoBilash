@@ -37,7 +37,7 @@ export const HomeScreen = () => {
   //       </View>
   //     );
   //   }
-
+  
   if (error || !data || !data.basicData) {
     return (
         <View style={styles.noContainer}>

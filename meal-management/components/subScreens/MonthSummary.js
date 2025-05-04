@@ -14,74 +14,8 @@ import {
 import { useDataContext } from "../../context/DataContext";
 
 export const MonthSummary = () => {
-  const { data, loading, error, refreshing, handleRefresh } = useDataContext();
-  const [selectedValue, setSelectedValue] = useState("Bazar");
-  const [values] = useState(["Bazar", "Meal", "Extra Spend", "Debit", "Total With Extra"]);
-  const [selectedData, setSelectedData] = useState(null);
-
+  const { data, loading, error, refreshing, handleRefresh, selectedValue, setSelectedValue, values, selectedData } = useDataContext();
   const navigation = useNavigation();
-
-  useEffect(() => {
-    switch (selectedValue) {
-      case "Bazar":
-        setSelectedData({
-          Name: "Amount",
-          Shaikat: data?.shaikat?.totalBazar,
-          Ajoy: data?.ajoy?.totalBazar,
-          Shanto: data?.shanto?.totalBazar,
-          Himel: data?.himel?.totalBazar,
-          Pranto: data?.pranto?.totalBazar,
-          Somir: data?.Somir?.totalBazar,
-        });
-        break;
-      case "Meal":
-        setSelectedData({
-          Name: "Amount",
-          Shaikat: data?.shaikat?.totalMeal,
-          Ajoy: data?.ajoy?.totalMeal,
-          Shanto: data?.shanto?.totalMeal,
-          Himel: data?.himel?.totalMeal,
-          Pranto: data?.pranto?.totalMeal,
-          Somir: data?.Somir?.totalMeal,
-        });
-        break;
-      case "Extra Spend":
-        setSelectedData({
-          Name: "Amount",
-          Shaikat: data?.shaikat?.extraSpend,
-          Ajoy: data?.ajoy?.extraSpend,
-          Shanto: data?.shanto?.extraSpend,
-          Himel: data?.himel?.extraSpend,
-          Pranto: data?.pranto?.extraSpend,
-          Somir: data?.Somir?.extraSpend,
-        });
-        break;
-      case "Debit":
-        setSelectedData({
-          Name: "Amount",
-          Shaikat: data?.shaikat?.debitCredit,
-          Ajoy: data?.ajoy?.debitCredit,
-          Shanto: data?.shanto?.debitCredit,
-          Himel: data?.himel?.debitCredit,
-          Pranto: data?.pranto?.debitCredit,
-          Somir: data?.Somir?.debitCredit,
-        });
-            break;
-        case "Total With Extra":
-        setSelectedData({
-            Name: "Amount",
-            Shaikat: data?.shaikat?.totalExtra,
-            Ajoy: data?.ajoy?.totalExtra,
-            Shanto: data?.shanto?.totalExtra,
-            Himel: data?.himel?.totalExtra,
-            Pranto: data?.pranto?.totalExtra,
-            Somir: data?.Somir?.totalExtra,
-        })
-        break;
-      default:
-        setSelectedData(null);
-    }
-  }, [selectedValue, data]);
     
     if (loading) {
         return (
