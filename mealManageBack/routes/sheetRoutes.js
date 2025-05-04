@@ -185,6 +185,7 @@ router.post('/addmeal', async (req, res) => {
     const sheetName = req.query.sheetName;
     const { date, name, numOfMeal } = req.body;
 
+    console.log("hello", sheetName, date, name, numOfMeal);
     const columnIndex = {
         0: "B",
         1: "C",
@@ -222,6 +223,7 @@ router.post('/addmeal', async (req, res) => {
         const formattedAmount = parseFloat(numOfMeal);
 
         await writeSheetData(sheetName, cell, [[formattedAmount]]);
+        
         res.json({ success: true, message: `Number of Meals for ${name} on ${date} updated to ${numOfMeal}` });
     } catch (error) {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });

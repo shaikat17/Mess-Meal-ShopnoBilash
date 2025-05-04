@@ -62,7 +62,7 @@ export const ExtraSpend = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       Alert.alert("Success", data.message, [{ text: "OK" }]);
       setLoading(false);
     } catch (error) {
