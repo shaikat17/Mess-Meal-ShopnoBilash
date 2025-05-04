@@ -64,14 +64,14 @@ export const AddMeal = () => {
     setnumOfMeal(undefined);
   }, [date, name, numOfMeal]);
 
-  const onChangeDate = (event, selectedDate) => {
+    const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
     if (Platform.OS === "ios") {
       // For iOS, the date picker doesn't automatically close
       setShowDatePicker(false);
     }
 
-    if (selectedDate) {
+        if (selectedDate) {
       setDate(selectedDate);
     }
   };
@@ -111,16 +111,7 @@ export const AddMeal = () => {
                 mode="date"
                 display="default"
                 onChange={onChangeDate}
-                style={styles.datePicker}
-              />
-            )}
-            {Platform.OS === "android" && showDatePicker && (
-              <DateTimePicker
-                value={date || new Date()}
-                mode="date"
-                display="default"
-                onChange={onChangeDate}
-                style={styles.datePicker}
+                              style={styles.datePicker}
               />
             )}
           </View>
