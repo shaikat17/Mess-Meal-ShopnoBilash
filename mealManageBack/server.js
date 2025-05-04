@@ -68,6 +68,9 @@ async function writeSheetData(sheetName, range, values) {
     try {
         const sheets = google.sheets({ version: 'v4', auth });
 
+        console.log("Updating range:", `${sheetName}!${range}`);
+        console.log("With values:", values);
+
         const response = await sheets.spreadsheets.values.update({
             spreadsheetId,
             range: `${sheetName}!${range}`,
@@ -77,11 +80,12 @@ async function writeSheetData(sheetName, range, values) {
             },
         });
 
-        console.log(`Data written to sheet "${sheetName}", range "${range}":`, response.data);
+        console.log("Update response:", response.data);
     } catch (error) {
-        console.error(`Error writing data to sheet "${sheetName}", range "${range}":`, error);
+        console.error("Error during writeSheetData:", error.response?.data || error.message);
     }
 }
+
 
 // all data
 app.get('/sheets/all', async (req, res) => {
@@ -253,10 +257,14 @@ app.post('/sheets/extra', async (req, res) => {
     }
 
     const sheetRow = rowIndex + 2;
-    const formattedValue = `${parseFloat(amount).toFixed(2)}`;
+    const formattedValue = parseFloat(amount);
+
+
+    console.log(`Writing "${formattedValue}" to ${sheetName}!C${sheetRow}`);
+
 
     await writeSheetData(sheetName, `C${sheetRow}`, [[formattedValue]]);
-    
+
     res.status(200).json({ message: "Data written successfully." });
 });
 
