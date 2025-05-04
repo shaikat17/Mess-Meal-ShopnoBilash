@@ -4,25 +4,30 @@ const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   // Main App Functionality Start
-  const [sheets, setSheets] = useState([]);
+    const [sheets, setSheets] = useState([]);
+    
+  const [loading, setLoading] = useState(true);
   // Replace with your actual API endpoint
-    const apiUrl = "http://192.168.1.11:5000/sheets"
+    const apiUrl = "http://192.168.1.11:5000/api/sheets"
       
-  // const apiUrl = "http://192.168.79.151:5000/sheets";
-//   const apiUrl = "https://meal-manage-back.vercel.app/sheets"; // Replace with your actual API endpoint
+  // const apiUrl = "http://192.168.79.151:5000/api/sheets";
+//   const apiUrl = "https://meal-manage-back.vercel.app/api/sheets"; // Replace with your actual API endpoint
 
   useEffect(() => {
-    const fetchSheets = async () => {
-      try {
+      const fetchSheets = async () => {
+        setLoading(true);
+        try {
+          
         const response = await fetch(`${apiUrl}/list`);
         const result = await response.json();
   
         setSheets((prevSheets) => {
           return ["Select Sheet", ...result.slice(0, result.length - 1)];
         });
-  
+  setLoading(false);
       } catch (error) {
-        console.error("Error fetching sheets:", error);
+            console.error("Error fetching sheets:", error);
+            setLoading(false);
       }
     };
   
@@ -53,7 +58,6 @@ export const DataProvider = ({ children }) => {
   const currentSheet = `${currentData} ${lastTwoDigits}`;
 
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSheet, setSelectedSheet] = useState(currentSheet);
 
@@ -109,7 +113,8 @@ export const DataProvider = ({ children }) => {
   ]);
   const [selectedData, setSelectedData] = useState(null);
 
-  useEffect(() => {
+    useEffect(() => {
+      setLoading(true);
     switch (selectedValue) {
       case "Bazar":
         setSelectedData({
@@ -119,8 +124,9 @@ export const DataProvider = ({ children }) => {
           Shanto: data?.shanto?.totalBazar,
           Himel: data?.himel?.totalBazar,
           Pranto: data?.pranto?.totalBazar,
-          Somir: data?.Somir?.totalBazar,
+          Somir: data?.somir?.totalBazar,
         });
+            setLoading(false);
         break;
       case "Meal":
         setSelectedData({
@@ -130,8 +136,9 @@ export const DataProvider = ({ children }) => {
           Shanto: data?.shanto?.totalMeal,
           Himel: data?.himel?.totalMeal,
           Pranto: data?.pranto?.totalMeal,
-          Somir: data?.Somir?.totalMeal,
+          Somir: data?.somir?.totalMeal,
         });
+            setLoading(false);
         break;
       case "Extra Spend":
         setSelectedData({
@@ -141,8 +148,9 @@ export const DataProvider = ({ children }) => {
           Shanto: data?.shanto?.extraSpend,
           Himel: data?.himel?.extraSpend,
           Pranto: data?.pranto?.extraSpend,
-          Somir: data?.Somir?.extraSpend,
+          Somir: data?.somir?.extraSpend,
         });
+            setLoading(false);
         break;
       case "Debit":
         setSelectedData({
@@ -152,8 +160,9 @@ export const DataProvider = ({ children }) => {
           Shanto: data?.shanto?.debitCredit,
           Himel: data?.himel?.debitCredit,
           Pranto: data?.pranto?.debitCredit,
-          Somir: data?.Somir?.debitCredit,
+          Somir: data?.somir?.debitCredit,
         });
+            setLoading(false);
         break;
       case "Total With Extra":
         setSelectedData({
@@ -165,9 +174,11 @@ export const DataProvider = ({ children }) => {
           Pranto: data?.pranto?.totalExtra,
           Somir: data?.somir?.totalExtra,
         });
+            setLoading(false);
         break;
       default:
-        setSelectedData(null);
+            setSelectedData(null);
+            setLoading(false);
     }
   }, [selectedValue, data]);
 
@@ -182,14 +193,17 @@ export const DataProvider = ({ children }) => {
     
     useEffect(() => {
         const fetchPersonNames = async () => {
+            setLoading(true);
             try {
               const response = await fetch(`${apiUrl}/names?sheetName=${selectedSheet}`);
               const result = await response.json();
               setPersonNames((prevSheets) => {
                 return ["Select Person", ...result];
               });
+              setLoading(false);
             } catch (error) {
-              console.error("Error fetching person names:", error);
+                console.error("Error fetching person names:", error);
+                setLoading(false);
             }
         };
         fetchPersonNames();
@@ -207,11 +221,37 @@ export const DataProvider = ({ children }) => {
 
   // Person Data Functionality End
 
+  // Extra Cost Functionality Start
+  const [extraSpends, setExtraSpends] = useState({
+      shaikat: data?.shaikat?.extraSpend?.toString() || "",
+      ajoy: data?.ajoy?.extraSpend?.toString() || "",
+      pranto: data?.pranto?.extraSpend?.toString() || "",
+      shanto: data?.shanto?.extraSpend?.toString() || "",
+      somir: data?.somir?.extraSpend?.toString() || "",
+      himel: data?.himel?.extraSpend?.toString() || "",
+  });
+  
+  useEffect(() => {
+    if (data) {
+      setExtraSpends({
+        shaikat: data?.shaikat?.extraSpend?.toString() || "",
+        ajoy: data?.ajoy?.extraSpend?.toString() || "",
+        pranto: data?.pranto?.extraSpend?.toString() || "",
+        shanto: data?.shanto?.extraSpend?.toString() || "",
+        somir: data?.somir?.extraSpend?.toString() || "",
+        himel: data?.himel?.extraSpend?.toString() || "",
+      });
+    }
+  }, [ data]);
+  
+  // Extra Cost Functionality End
+
   return (
     <DataContext.Provider
       value={{
         data,
-        loading,
+              loading,
+        setLoading,
         error,
         sheets,
         selectedSheet,
@@ -227,6 +267,8 @@ export const DataProvider = ({ children }) => {
         selectedPerson,
               setSelectedPerson,
         apiUrl,
+        extraSpends,
+        setExtraSpends
       }}
     >
       {children}

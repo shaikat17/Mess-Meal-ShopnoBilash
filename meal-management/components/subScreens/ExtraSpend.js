@@ -1,5 +1,6 @@
 import {
-    Alert,
+  ActivityIndicator,
+  Alert,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -8,20 +9,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useState } from "react";
 import { useDataContext } from "../../context/DataContext";
+import { useNavigation } from "@react-navigation/native";
 
 export const ExtraSpend = () => {
-  const { data, loading, error, apiUrl, selectedSheet, refreshing, handleRefresh } = useDataContext();
+  const {
+    data,
+    loading,
+    error,
+    apiUrl,
+    selectedSheet,
+    refreshing,
+    handleRefresh,
+    setLoading,
+    extraSpends,
+    setExtraSpends,
+  } = useDataContext();
 
-  const [extraSpends, setExtraSpends] = useState({
-    shaikat: data?.shaikat?.extraSpend?.toString() || "",
-    ajoy: data?.ajoy?.extraSpend?.toString() || "",
-    pranto: data?.pranto?.extraSpend?.toString() || "",
-    shanto: data?.shanto?.extraSpend?.toString() || "",
-    somir: data?.somir?.extraSpend?.toString() || "",
-    himel: data?.himel?.extraSpend?.toString() || "",
-  });
+  const navigation = useNavigation();
 
   const handleChange = (name, value) => {
     setExtraSpends((prev) => ({
@@ -30,37 +35,46 @@ export const ExtraSpend = () => {
     }));
   };
 
-    const handleUpdate = async (name) => {
+  const handleUpdate = async (name) => {
+    setLoading(true);
     const amount = parseFloat(extraSpends[name]);
-  
+
     if (isNaN(amount)) {
-        console.warn("Invalid amount for", name);
-        Alert.alert("Invalid Amount", "Please enter a valid amount. Like 1000, 520", [
-          { text: "OK" },
-        ]);
+      console.warn("Invalid amount for", name);
+      Alert.alert(
+        "Invalid Amount",
+        "Please enter a valid amount. Like 1000, 520",
+        [{ text: "OK" }]
+      );
+      setLoading(false);
       return;
     }
-  
+
     try {
-      const response = await fetch(`${apiUrl}/extra?sheetName=${selectedSheet}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, amount }),
-      });
+      const response = await fetch(
+        `${apiUrl}/extra?sheetName=${selectedSheet}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, amount }),
+        }
+      );
       const data = await response.json();
-        console.log(data);
+      console.log(data);
       Alert.alert("Success", data.message, [{ text: "OK" }]);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
-  
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
         <Text>Loading data...</Text>
       </View>
     );
@@ -90,7 +104,12 @@ export const ExtraSpend = () => {
         </Text>
       </View>
 
-      <ScrollView style={{ width: "100%" }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
+      <ScrollView
+        style={{ width: "100%" }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
         <View style={styles.tableContainer}>
           <View style={styles.tableRow}>
             <Text style={[styles.cell, styles.boldCell]}>Name</Text>
@@ -123,9 +142,12 @@ export const ExtraSpend = () => {
         </View>
       </ScrollView>
 
-      {/* <View style={styles.titleContainer}>
-        <Text style={styles.title}>Add Extra Spend</Text>
-      </View> */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate("SettingMain")}
+      >
+        <Text style={styles.backButtonText}>Back to Settings</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -193,5 +215,17 @@ const styles = StyleSheet.create({
   updateBtnText: {
     color: "#fff",
     fontSize: 16,
+  },
+  backButton: {
+    backgroundColor: "#03A791",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginVertical: 10,
+  },
+  backButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

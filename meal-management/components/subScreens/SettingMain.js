@@ -9,6 +9,7 @@ export const SettingMain = () => {
   const features = [
     { title: "📅 Month Summary", route: "monthsummary" },
     { title: "💸 Extra Spend", route: "extraspend" },
+    { title: "🍽️ Add Meal", route: "addmeal" },
     { title: "📈 Analytics", route: "analytics" },
     { title: "⚙️ Preferences", route: "preferences" },
     { title: "👤 Profile Settings", route: "profilesettings" },
