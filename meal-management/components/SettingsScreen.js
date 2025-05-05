@@ -3,6 +3,7 @@ import { SettingMain } from "./subScreens/SettingMain";
 import { MonthSummary } from "./subScreens/MonthSummary";
 import { ExtraSpend } from "./subScreens/ExtraSpend";
 import { AddMeal } from "./subScreens/AddMeal";
+import { Analytics } from "./subScreens/Analytics";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export function SettingsStack() {
       <Stack.Screen name="monthsummary" component={MonthSummary} />
       <Stack.Screen name="extraspend" component={ExtraSpend} />
       <Stack.Screen name="addmeal" component={AddMeal} />
+      <Stack.Screen name="analytics" component={Analytics} />
     </Stack.Navigator>
   );
 }

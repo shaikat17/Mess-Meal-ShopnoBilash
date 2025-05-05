@@ -10,7 +10,7 @@ export const SettingMain = () => {
     { title: "📅 Month Summary", route: "monthsummary" },
     { title: "💸 Extra Spend", route: "extraspend" },
     { title: "🍽️ Add Meal", route: "addmeal" },
-    // { title: "📈 Analytics", route: "analytics" },
+    { title: "📈 Analytics", route: "analytics" },
     // { title: "⚙️ Preferences", route: "preferences" },
     // { title: "👤 Profile Settings", route: "profilesettings" },
     // { title: "🔔 Notifications", route: "notifications" },
