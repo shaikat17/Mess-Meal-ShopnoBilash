@@ -11,6 +11,7 @@ export const SettingMain = () => {
     { title: "💸 Extra Spend", route: "extraspend" },
     { title: "🍽️ Add Meal", route: "addmeal" },
     { title: "📈 Analytics", route: "analytics" },
+    { title: "👀 View Meal", route: "viewmeal" },
     // { title: "⚙️ Preferences", route: "preferences" },
     // { title: "👤 Profile Settings", route: "profilesettings" },
     // { title: "🔔 Notifications", route: "notifications" },

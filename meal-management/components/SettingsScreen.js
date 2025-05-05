@@ -4,6 +4,7 @@ import { MonthSummary } from "./subScreens/MonthSummary";
 import { ExtraSpend } from "./subScreens/ExtraSpend";
 import { AddMeal } from "./subScreens/AddMeal";
 import { Analytics } from "./subScreens/Analytics";
+import { ViewMeal } from "./subScreens/ViewMeal";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ export function SettingsStack() {
       <Stack.Screen name="extraspend" component={ExtraSpend} />
       <Stack.Screen name="addmeal" component={AddMeal} />
       <Stack.Screen name="analytics" component={Analytics} />
+      <Stack.Screen name="viewmeal" component={ViewMeal} />
     </Stack.Navigator>
   );
 }

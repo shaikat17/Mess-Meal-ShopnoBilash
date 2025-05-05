@@ -278,6 +278,36 @@ export const DataProvider = ({ children }) => {
 
   // Extra Cost Functionality End
 
+  // Meal Table Functionality Start
+
+  const [mealTableData, setMealTableData] = useState([]);
+
+  useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await fetch(
+            `${apiUrl}/mealtable?sheetName=${selectedSheet}`
+          );
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data: ${response.status}`);
+          }
+          const result = await response.json();
+          setMealTableData(result);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      if (selectedSheet) {
+        //prevent the api call with empty selectedSheet
+        fetchData();
+      }
+    }, [selectedSheet]);
+
   return (
     <DataContext.Provider
       value={{
@@ -301,6 +331,7 @@ export const DataProvider = ({ children }) => {
         apiUrl,
         extraSpends,
         setExtraSpends,
+        mealTableData
       }}
     >
       {children}
