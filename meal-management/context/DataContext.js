@@ -261,17 +261,17 @@ export const DataProvider = ({ children }) => {
     if (data) {
       setExtraSpends({
         [personNames[1]]:
-      data?.[[personNames[1].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[3]]]:
-      data?.[[personNames[3].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[2]]]:
-      data?.[[personNames[2].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[6]]]:
-      data?.[[personNames[6].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[5]]]:
-      data?.[[personNames[5].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[4]]]:
-      data?.[[personNames[4].toLowerCase()]]?.extraSpend?.toString() || "",
+          data?.[[personNames[1].toLowerCase()]]?.extraSpend?.toString() || "",
+        [[personNames[3]]]:
+          data?.[[personNames[3].toLowerCase()]]?.extraSpend?.toString() || "",
+        [[personNames[2]]]:
+          data?.[[personNames[2].toLowerCase()]]?.extraSpend?.toString() || "",
+        [[personNames[6]]]:
+          data?.[[personNames[6].toLowerCase()]]?.extraSpend?.toString() || "",
+        [[personNames[5]]]:
+          data?.[[personNames[5].toLowerCase()]]?.extraSpend?.toString() || "",
+        [[personNames[4]]]:
+          data?.[[personNames[4].toLowerCase()]]?.extraSpend?.toString() || "",
       });
     }
   }, [data]);

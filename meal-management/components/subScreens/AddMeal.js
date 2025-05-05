@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     width: 150,
-    height: 50,
+    height: 60,
     borderWidth: 1,
     borderColor: "#C1C0B9",
     borderRadius: 4,
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     color: "#808080",
-    fontSize: 16,
+    fontSize: 12,
   },
 });
 
