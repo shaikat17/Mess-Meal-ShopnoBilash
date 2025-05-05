@@ -13,6 +13,10 @@ router.get('/', async (req, res) => {
         return res.status(400).json({ error: "Sheet name is required." });
     }
     try {
+        const data1 = await getSheetData(sheetName, "L2:L7");
+        const names = data1.flat();
+        console.log("🚀 ~ router.get ~ names:", names)
+        
         const data = await getSheetData(sheetName, "A1:R44"); //changed here
         const Mealdata = {
             "basicData": {
@@ -24,7 +28,7 @@ router.get('/', async (req, res) => {
                 "perMeal": data[6][4],
                 "extraPer": data[8][2],
             },
-            "shaikat": {
+            [names[0].toLowerCase()]: {
                 "extraSpend": data[3][2],
                 "mealCost": data[1][12],
                 "houseWifi": data[1][13],
@@ -35,7 +39,7 @@ router.get('/', async (req, res) => {
                 "totalMeal": data[42][1],
                 "totalBazar": data[31][10],
             },
-            "ajoy": {
+            [[names[2].toLowerCase()]]: {
                 "extraSpend": data[2][2],
                 "mealCost": data[3][12],
                 "houseWifi": data[3][13],
@@ -46,7 +50,7 @@ router.get('/', async (req, res) => {
                 "totalMeal": data[42][3],
                 "totalBazar": data[31][12],
             },
-            "shanto": {
+            [names[1].toLowerCase()]: {
                 "extraSpend": data[6][2],
                 "mealCost": data[2][12],
                 "houseWifi": data[2][13],
@@ -57,7 +61,7 @@ router.get('/', async (req, res) => {
                 "totalMeal": data[42][2],
                 "totalBazar": data[31][9],
             },
-            "himel": {
+            [names[5].toLowerCase()]: {
                 "extraSpend": data[1][2],
                 "mealCost": data[6][12],
                 "houseWifi": data[6][13],
@@ -68,7 +72,7 @@ router.get('/', async (req, res) => {
                 "totalMeal": data[42][6],
                 "totalBazar": data[31][14],
             },
-            "pranto": {
+            [names[4].toLowerCase()]: {
                 "extraSpend": data[4][2],
                 "mealCost": data[5][12],
                 "houseWifi": data[5][13],
@@ -79,7 +83,7 @@ router.get('/', async (req, res) => {
                 "totalMeal": data[42][5],
                 "totalBazar": data[31][13],
             },
-            "somir": {
+            [names[3].toLowerCase()]: {
                 "extraSpend": data[5][2],
                 "mealCost": data[4][12],
                 "houseWifi": data[4][13],

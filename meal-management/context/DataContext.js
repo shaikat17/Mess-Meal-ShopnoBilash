@@ -4,33 +4,32 @@ const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   // Main App Functionality Start
-    const [sheets, setSheets] = useState([]);
-    
+  const [sheets, setSheets] = useState([]);
+
   const [loading, setLoading] = useState(true);
   // Replace with your actual API endpoint
-    const apiUrl = "http://192.168.1.11:5000/api/sheets"
-      
+  const apiUrl = "http://192.168.1.11:5000/api/sheets";
+
   // const apiUrl = "http://192.168.79.151:5000/api/sheets";
   // const apiUrl = "https://meal-manage-back.vercel.app/api/sheets"; // Replace with your actual API endpoint
 
   useEffect(() => {
-      const fetchSheets = async () => {
-        setLoading(true);
-        try {
-          
+    const fetchSheets = async () => {
+      setLoading(true);
+      try {
         const response = await fetch(`${apiUrl}/list`);
         const result = await response.json();
-  
+
         setSheets((prevSheets) => {
           return ["Select Sheet", ...result.slice(0, result.length - 1)];
         });
-  setLoading(false);
+        setLoading(false);
       } catch (error) {
-            console.error("Error fetching sheets:", error);
-            setLoading(false);
+        console.error("Error fetching sheets:", error);
+        setLoading(false);
       }
     };
-  
+
     fetchSheets();
   }, []);
 
@@ -113,74 +112,94 @@ export const DataProvider = ({ children }) => {
   ]);
   const [selectedData, setSelectedData] = useState(null);
 
-    useEffect(() => {
-      setLoading(true);
+  useEffect(() => {
+    setLoading(true);
     switch (selectedValue) {
       case "Bazar":
         setSelectedData({
           Name: "Amount",
-          Shaikat: data?.shaikat?.totalBazar,
-          Ajoy: data?.ajoy?.totalBazar,
-          Shanto: data?.shanto?.totalBazar,
-          Himel: data?.himel?.totalBazar,
-          Pranto: data?.pranto?.totalBazar,
-          Somir: data?.somir?.totalBazar,
+          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.totalBazar,
+          [[personNames[3]]]:
+            data?.[[personNames[3].toLowerCase()]]?.totalBazar,
+          [[personNames[2]]]:
+            data?.[[personNames[2].toLowerCase()]]?.totalBazar,
+          [[personNames[6]]]:
+            data?.[[personNames[6].toLowerCase()]]?.totalBazar,
+          [[personNames[5]]]:
+            data?.[[personNames[5].toLowerCase()]]?.totalBazar,
+          [[personNames[4]]]:
+            data?.[[personNames[4].toLowerCase()]]?.totalBazar,
         });
-            setLoading(false);
+        setLoading(false);
         break;
       case "Meal":
         setSelectedData({
           Name: "Amount",
-          Shaikat: data?.shaikat?.totalMeal,
-          Ajoy: data?.ajoy?.totalMeal,
-          Shanto: data?.shanto?.totalMeal,
-          Himel: data?.himel?.totalMeal,
-          Pranto: data?.pranto?.totalMeal,
-          Somir: data?.somir?.totalMeal,
+          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.totalMeal,
+          [[personNames[3]]]: data?.[[personNames[3].toLowerCase()]]?.totalMeal,
+          [[personNames[2]]]: data?.[[personNames[2].toLowerCase()]]?.totalMeal,
+          [[personNames[6]]]: data?.[[personNames[6].toLowerCase()]]?.totalMeal,
+          [[personNames[5]]]: data?.[[personNames[5].toLowerCase()]]?.totalMeal,
+          [[personNames[4]]]: data?.[[personNames[4].toLowerCase()]]?.totalMeal,
         });
-            setLoading(false);
+        setLoading(false);
         break;
       case "Extra Spend":
         setSelectedData({
           Name: "Amount",
-          Shaikat: data?.shaikat?.extraSpend,
-          Ajoy: data?.ajoy?.extraSpend,
-          Shanto: data?.shanto?.extraSpend,
-          Himel: data?.himel?.extraSpend,
-          Pranto: data?.pranto?.extraSpend,
-          Somir: data?.somir?.extraSpend,
+          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.extraSpend,
+          [[personNames[3]]]:
+            data?.[[personNames[3].toLowerCase()]]?.extraSpend,
+          [[personNames[2]]]:
+            data?.[[personNames[2].toLowerCase()]]?.extraSpend,
+          [[personNames[6]]]:
+            data?.[[personNames[6].toLowerCase()]]?.extraSpend,
+          [[personNames[5]]]:
+            data?.[[personNames[5].toLowerCase()]]?.extraSpend,
+          [[personNames[4]]]:
+            data?.[[personNames[4].toLowerCase()]]?.extraSpend,
         });
-            setLoading(false);
+        setLoading(false);
         break;
       case "Debit":
         setSelectedData({
           Name: "Amount",
-          Shaikat: data?.shaikat?.debitCredit,
-          Ajoy: data?.ajoy?.debitCredit,
-          Shanto: data?.shanto?.debitCredit,
-          Himel: data?.himel?.debitCredit,
-          Pranto: data?.pranto?.debitCredit,
-          Somir: data?.somir?.debitCredit,
+          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.debitCredit,
+          [[personNames[3]]]:
+            data?.[[personNames[3].toLowerCase()]]?.debitCredit,
+          [[personNames[2]]]:
+            data?.[[personNames[2].toLowerCase()]]?.debitCredit,
+          [[personNames[6]]]:
+            data?.[[personNames[6].toLowerCase()]]?.debitCredit,
+          [[personNames[5]]]:
+            data?.[[personNames[5].toLowerCase()]]?.debitCredit,
+          [[personNames[4]]]:
+            data?.[[personNames[4].toLowerCase()]]?.debitCredit,
         });
-            setLoading(false);
+        setLoading(false);
         break;
       case "Total With Extra":
         setSelectedData({
           Name: "Amount",
-          Shaikat: data?.shaikat?.totalExtra,
-          Ajoy: data?.ajoy?.totalExtra,
-          Shanto: data?.shanto?.totalExtra,
-          Himel: data?.himel?.totalExtra,
-          Pranto: data?.pranto?.totalExtra,
-          Somir: data?.somir?.totalExtra,
+          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.totalExtra,
+          [[personNames[3]]]:
+            data?.[[personNames[3].toLowerCase()]]?.totalExtra,
+          [[personNames[2]]]:
+            data?.[[personNames[2].toLowerCase()]]?.totalExtra,
+          [[personNames[6]]]:
+            data?.[[personNames[6].toLowerCase()]]?.totalExtra,
+          [[personNames[5]]]:
+            data?.[[personNames[5].toLowerCase()]]?.totalExtra,
+          [[personNames[4]]]:
+            data?.[[personNames[4].toLowerCase()]]?.totalExtra,
         });
-            setLoading(false);
+        setLoading(false);
         break;
       default:
-            setSelectedData(null);
-            setLoading(false);
+        setSelectedData(null);
+        setLoading(false);
     }
-  }, [selectedValue, data]);
+  }, [selectedValue, data, personNames]);
 
   // Monthly Summary Functionality End
 
@@ -188,28 +207,29 @@ export const DataProvider = ({ children }) => {
 
   const [selectedPerson, setSelectedPerson] = useState("Select Person");
   const [personData, setPersonData] = useState(null);
-  const [personNames, setPersonNames] = useState([
-  ]);
-    
-    useEffect(() => {
-        const fetchPersonNames = async () => {
-            setLoading(true);
-            try {
-              const response = await fetch(`${apiUrl}/names?sheetName=${selectedSheet}`);
-              const result = await response.json();
-              setPersonNames((prevSheets) => {
-                return ["Select Person", ...result];
-              });
-              setLoading(false);
-            } catch (error) {
-                console.error("Error fetching person names:", error);
-                setLoading(false);
-            }
-        };
-        fetchPersonNames();
-    },[selectedSheet]);
+  const [personNames, setPersonNames] = useState([]);
 
-    useEffect(() => {
+  useEffect(() => {
+    const fetchPersonNames = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `${apiUrl}/names?sheetName=${selectedSheet}`
+        );
+        const result = await response.json();
+        setPersonNames((prevSheets) => {
+          return ["Select Person", ...result];
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching person names:", error);
+        setLoading(false);
+      }
+    };
+    fetchPersonNames();
+  }, [selectedSheet, data]);
+
+  useEffect(() => {
     if (selectedPerson === "Select Person") {
       setPersonData(null);
     }
@@ -223,34 +243,46 @@ export const DataProvider = ({ children }) => {
 
   // Extra Cost Functionality Start
   const [extraSpends, setExtraSpends] = useState({
-      shaikat: data?.shaikat?.extraSpend?.toString() || "",
-      ajoy: data?.ajoy?.extraSpend?.toString() || "",
-      pranto: data?.pranto?.extraSpend?.toString() || "",
-      shanto: data?.shanto?.extraSpend?.toString() || "",
-      somir: data?.somir?.extraSpend?.toString() || "",
-      himel: data?.himel?.extraSpend?.toString() || "",
+    [personNames[1]]:
+      data?.[[personNames[1].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[3]]]:
+      data?.[[personNames[3].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[2]]]:
+      data?.[[personNames[2].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[6]]]:
+      data?.[[personNames[6].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[5]]]:
+      data?.[[personNames[5].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[4]]]:
+      data?.[[personNames[4].toLowerCase()]]?.extraSpend?.toString() || "",
   });
-  
+
   useEffect(() => {
     if (data) {
       setExtraSpends({
-        shaikat: data?.shaikat?.extraSpend?.toString() || "",
-        ajoy: data?.ajoy?.extraSpend?.toString() || "",
-        pranto: data?.pranto?.extraSpend?.toString() || "",
-        shanto: data?.shanto?.extraSpend?.toString() || "",
-        somir: data?.somir?.extraSpend?.toString() || "",
-        himel: data?.himel?.extraSpend?.toString() || "",
+        [personNames[1]]:
+      data?.[[personNames[1].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[3]]]:
+      data?.[[personNames[3].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[2]]]:
+      data?.[[personNames[2].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[6]]]:
+      data?.[[personNames[6].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[5]]]:
+      data?.[[personNames[5].toLowerCase()]]?.extraSpend?.toString() || "",
+    [[personNames[4]]]:
+      data?.[[personNames[4].toLowerCase()]]?.extraSpend?.toString() || "",
       });
     }
-  }, [ data]);
-  
+  }, [data]);
+
   // Extra Cost Functionality End
 
   return (
     <DataContext.Provider
       value={{
         data,
-              loading,
+        loading,
         setLoading,
         error,
         sheets,
@@ -265,10 +297,10 @@ export const DataProvider = ({ children }) => {
         personData,
         personNames,
         selectedPerson,
-              setSelectedPerson,
+        setSelectedPerson,
         apiUrl,
         extraSpends,
-        setExtraSpends
+        setExtraSpends,
       }}
     >
       {children}

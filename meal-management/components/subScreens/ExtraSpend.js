@@ -24,6 +24,7 @@ export const ExtraSpend = () => {
     setLoading,
     extraSpends,
     setExtraSpends,
+    personNames
   } = useDataContext();
 
   const navigation = useNavigation();
@@ -34,6 +35,7 @@ export const ExtraSpend = () => {
       [name]: value,
     }));
   };
+
 
   const handleUpdate = async (name) => {
     setLoading(true);
@@ -117,7 +119,7 @@ export const ExtraSpend = () => {
             <Text style={[styles.cell, styles.boldCell]}>Action</Text>
           </View>
 
-          {["shaikat", "ajoy", "pranto", "shanto", "somir", "himel"].map(
+          {personNames.slice(1).map(
             (name) => (
               <View key={name} style={styles.tableRow}>
                 <Text style={styles.cell}>
