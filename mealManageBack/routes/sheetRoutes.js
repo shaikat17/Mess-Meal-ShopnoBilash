@@ -236,4 +236,27 @@ router.post('/addmeal', async (req, res) => {
 });
 
 
+// Route to get meal table
+router.get('/mealtable', async (req, res) => {
+    const sheetName = req.query.sheetName;
+
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
+
+    try {
+        const data = await getSheetData(sheetName, "A11:G42");
+
+        data.map(row => {
+            row.map((item, index) => {
+                console.log(item)
+            })
+        })
+
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
+    }
+})
+
 export default router;

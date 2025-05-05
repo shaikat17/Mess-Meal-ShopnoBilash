@@ -27,8 +27,8 @@ export const Analytics = () => {
   } = useDataContext();
   const [screenWidth, setScreenWidth] = useState(0);
   const [chartData, setChartData] = useState([]);
-  const [lineChartLabels, setLineChartLabels] = useState([]);
-  const [lineChartData, setLineChartData] = useState([]);
+  // const [lineChartLabels, setLineChartLabels] = useState([]);
+  // const [lineChartData, setLineChartData] = useState([]);
 
   useEffect(() => {
     const { width } = Dimensions.get("window");
@@ -37,8 +37,6 @@ export const Analytics = () => {
 
   useEffect(() => {
     if (selectedData) {
-      setLineChartLabels([]);
-      setLineChartData([]);
       // Convert the object into an array of key-value pairs and process
       const dataArray = Object.entries(selectedData)
         .slice(1)
@@ -59,8 +57,6 @@ export const Analytics = () => {
           const numericValue = Number(value.replace(/[৳,]/g, ""));
           const validValue = isNaN(numericValue) ? 0 : numericValue;
 
-          setLineChartLabels((prev) => [...prev, name]);
-          setLineChartData((prev) => [...prev, validValue]);
 
           return {
             name: name,
@@ -74,8 +70,6 @@ export const Analytics = () => {
       setChartData(dataArray);
     } else {
       setChartData([]);
-      setLineChartLabels([]);
-      setLineChartData([]);
     }
   }, [selectedData]);
 
@@ -94,9 +88,6 @@ export const Analytics = () => {
     },
   };
   const navigation = useNavigation();
-
-  console.log(lineChartLabels);
-  console.log(lineChartData);
 
   if (loading) {
     return (
@@ -173,23 +164,7 @@ export const Analytics = () => {
           style={{ flex: 1 }}
         />
       </View>
-      {/* <View style={{ backgroundColor: "#f0f4c3" }}>
-        <LineChart
-          data={{
-            labels: lineChartLabels.length > 0 ? lineChartLabels : [],
-            datasets: [
-              {
-                data: lineChartData.length > 0 ? lineChartData : [],
-                color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-              },
-            ],
-          }}
-          width={screenWidth}
-          height={220}
-          chartConfig={chartConfig}
-          backgroundColor={"#f0f4c3"} //Added background color
-        />
-      </View> */}
+      
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.navigate("SettingMain")}
