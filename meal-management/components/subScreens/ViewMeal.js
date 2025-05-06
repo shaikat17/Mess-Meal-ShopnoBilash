@@ -53,7 +53,7 @@ export const ViewMeal = () => {
           <View key={index} style={styles.tableRow}>
           {item.map((subItem, subIndex) => (
             
-            <Text style={index === 0 ? styles.boldCell : styles.cell}>{subIndex === 0 ? subItem.split('-').slice(0,-1).join('-') : subItem}</Text>
+            <Text key={subIndex} style={index === 0 ? styles.boldCell : styles.cell}>{subIndex === 0 ? subItem.split('-').slice(0,-1).join('-') : subItem}</Text>
           
         ))}
           </View>

@@ -5,12 +5,14 @@ import LottieView from "lottie-react-native";
 import {
   ActivityIndicator,
   Dimensions,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { PieChart, LineChart } from "react-native-chart-kit";
+import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
+
 import { useDataContext } from "../../context/DataContext";
 
 export const Analytics = () => {
@@ -18,76 +20,55 @@ export const Analytics = () => {
     data,
     loading,
     error,
-    refreshing,
-    handleRefresh,
     selectedValue,
     setSelectedValue,
     values,
     selectedData,
   } = useDataContext();
-  const [screenWidth, setScreenWidth] = useState(0);
   const [chartData, setChartData] = useState([]);
-  // const [lineChartLabels, setLineChartLabels] = useState([]);
-  // const [lineChartData, setLineChartData] = useState([]);
+  const [isZero, setIsZero] = useState(false);
 
-  useEffect(() => {
-    const { width } = Dimensions.get("window");
-    setScreenWidth(width);
-  }, []);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (selectedData) {
-      // Convert the object into an array of key-value pairs and process
-      const dataArray = Object.entries(selectedData)
+      const colors = [
+        "#F44336",
+        "#2196F3",
+        "#FF9800",
+        "#4CAF50",
+        "#9C27B0",
+        "#03f4b4",
+        "#8BC34A",
+        "#FFEB3B",
+        "#FF5722",
+        "#00BCD4",
+      ];
+
+      const newData = Object.entries(selectedData)
         .slice(1)
-        .map(([name, value], index) => {
-          const colors = [
-            "rgba(214, 11, 102, 1)",
-            "#F00",
-            "#fb01ff",
-            "rgb(0, 0, 255)",
-            "rgb(16, 223, 130)",
-            "#8073e5",
-            "#d8d107",
-            "#d900ff",
-            "#90CAF9",
-          ];
+        .map(([key, value], index) => {
+          const amount = parseFloat(value.replace(/[৳,]/g, "")) || 0;
           const color = colors[index % colors.length];
-          // Remove '৳' and ',' and convert to number
-          const numericValue = Number(value.replace(/[৳,]/g, ""));
-          const validValue = isNaN(numericValue) ? 0 : numericValue;
-
-
           return {
-            name: name,
-            population: validValue,
-            color: color,
-            legendFontColor: "#808080",
-            legendFontSize: 15,
+            label: key,
+            dataPointText: amount,
+            topLabelComponent: () => (
+              <Text style={{ color: "#808080", fontSize: 12, marginTop: 6 }}>
+                {amount}
+              </Text>
+            ),
+            value: amount,
+            frontColor: color,
+            text: `${key}\n${amount}`, // Optional: custom label
           };
         });
-      // console.log("data", dataArray);
-      setChartData(dataArray);
-    } else {
-      setChartData([]);
+      const isZero = newData.every((item) => item.value === 0);
+
+      setIsZero(isZero);
+      setChartData(newData);
     }
   }, [selectedData]);
-
-  const chartConfig = {
-    backgroundGradientFrom: "#1E293B",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#1E293B",
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2,
-    barPercentage: 0.8,
-    propsForLabels: {
-      fill: "#000",
-    },
-    propsForLegend: {
-      fill: "#000",
-    },
-  };
-  const navigation = useNavigation();
 
   if (loading) {
     return (
@@ -151,20 +132,55 @@ export const Analytics = () => {
           ))}
         </Picker>
       </View>
-      <View style={{ flex: 1, height: 400 }}>
-        <PieChart
-          data={chartData.length > 0 ? chartData : []}
-          width={screenWidth}
-          height={220}
-          chartConfig={chartConfig}
-          accessor={"population"}
-          backgroundColor={"transparent"}
-          paddingLeft={"15"}
-          center={[10, 50]}
-          style={{ flex: 1 }}
-        />
-      </View>
-      
+
+      {isZero ? (
+        <View style={styles.noContainer}>
+          <LottieView
+            source={require("../../assets/json/notfound.json")}
+            autoPlay
+            loop
+            style={{ width: 200, height: 200 }}
+          />
+          <Text style={styles.noDataText}>No Data Available</Text>
+        </View>
+      ) : (
+        <ScrollView contentContainerStyle={styles.chartContainer}>
+          <Text style={styles.chartTitle}>Pie Chart</Text>
+          <PieChart
+            data={chartData}
+            radius={120}
+            innerRadius={40}
+            showValuesAsLabels
+            showText
+            fontSize={10}
+          />
+          <Text style={styles.chartTitle}>Bar Chart</Text>
+          <BarChart
+            data={chartData}
+            barWidth={22}
+            frontColor="#03A791"
+            yAxisTextStyle={{ color: "#888" }}
+            xAxisLabelTextStyle={{ color: "#888" }}
+          />
+          <Text style={styles.chartTitle}>Line Chart</Text>
+            <LineChart
+              areaChart
+              curved
+            data={chartData}
+            yAxisTextStyle={{ color: "#808080" }}
+            xAxisLabelTextStyle={{ color: "#888" }}
+            dataPointsColor="#f90202"
+            color="#03A791"
+            animateOnDataChange
+            startFillColor="rgb(46, 217, 255)"
+            startOpacity={0.8}
+            endFillColor="rgb(203, 241, 250)"
+            endOpacity={0.3}
+          />
+          <Text></Text>
+        </ScrollView>
+      )}
+
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.navigate("SettingMain")}
@@ -195,7 +211,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: "#03A791",
     width: "100%",
-    borderEndEndRadius: 10,
+    borderBottomEndRadius: 10,
     borderBottomStartRadius: 10,
   },
   title: {
@@ -224,25 +240,6 @@ const styles = StyleSheet.create({
     color: "#808080",
     fontSize: 12,
   },
-  tableContainer: {
-    borderRadius: 8,
-    margin: 16,
-  },
-  tableRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 8,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#FF0B55",
-  },
-  cell: {
-    flex: 1,
-    fontSize: 16,
-  },
-  boldCell: {
-    fontWeight: "bold",
-  },
   backButton: {
     backgroundColor: "#03A791",
     paddingVertical: 12,
@@ -255,7 +252,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  chartContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  chartTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
+    color: "#fff",
+    textAlign: "center",
+    backgroundColor: "#03A791",
+    paddingVertical: 10,
+    width: "50%",
+  },
 });
-
-export default Analytics;
-
