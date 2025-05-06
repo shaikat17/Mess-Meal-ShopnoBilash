@@ -306,7 +306,42 @@ export const DataProvider = ({ children }) => {
         //prevent the api call with empty selectedSheet
         fetchData();
       }
+  }, [selectedSheet]);
+
+  // Meal Table Functionality End
+
+  // Bazar Table Functionality Start
+
+  const [bazarTableData, setBazarTableData] = useState([]);
+
+  useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await fetch(
+            `${apiUrl}/bazartable?sheetName=${selectedSheet}`
+          );
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data: ${response.status}`);
+          }
+          const result = await response.json();
+          // console.log(result)
+          setBazarTableData(result);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      if (selectedSheet) {
+        //prevent the api call with empty selectedSheet
+        fetchData();
+      }
     }, [selectedSheet]);
+
+  // Bazar Table Functionality End
 
   return (
     <DataContext.Provider
@@ -331,7 +366,8 @@ export const DataProvider = ({ children }) => {
         apiUrl,
         extraSpends,
         setExtraSpends,
-        mealTableData
+        mealTableData,
+        bazarTableData
       }}
     >
       {children}
