@@ -5,6 +5,7 @@ import { ExtraSpend } from "./subScreens/ExtraSpend";
 import { AddMeal } from "./subScreens/AddMeal";
 import { Analytics } from "./subScreens/Analytics";
 import { ViewMeal } from "./subScreens/ViewMeal";
+import { AddBazar } from "./subScreens/AddBazar";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ export function SettingsStack() {
       <Stack.Screen name="addmeal" component={AddMeal} />
       <Stack.Screen name="analytics" component={Analytics} />
       <Stack.Screen name="viewmeal" component={ViewMeal} />
+      <Stack.Screen name="addbazar" component={AddBazar} />
     </Stack.Navigator>
   );
 }

@@ -290,7 +290,7 @@ router.post('/addbazar', async (req, res) => {
         if (rowIndex === -1) {
             return res.status(404).json({ error: "Name not found in sheet." });
         }
-        
+
         const formattedAmount = parseFloat(amount);
         const columnLetter = columnIndex[rowIndex];
         const colRange = `${columnLetter}13:${columnLetter}`;
@@ -302,7 +302,7 @@ router.post('/addbazar', async (req, res) => {
 
         await writeSheetData(sheetName, `${columnLetter}${firstEmptyRowIndex}`, [[formattedAmount]]);
 
-        res.json({ success: true, message: `Bazar for ${name} added to ${amount}` });
+        res.json({ success: true, message: `${amount} TK added to ${name}'s bazar list` });
     } catch (error) {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
     }

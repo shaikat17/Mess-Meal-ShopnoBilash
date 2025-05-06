@@ -98,6 +98,7 @@ export const Analytics = () => {
               setSelectedValue(itemValue);
             }}
             style={styles.picker}
+            dropdownIconColor={"#000"}
           >
             {values.map((value) => (
               <Picker.Item key={value} label={value} value={value} />
@@ -126,6 +127,7 @@ export const Analytics = () => {
             setSelectedValue(itemValue);
           }}
           style={styles.picker}
+          dropdownIconColor={"#000"}
         >
           {values.map((value) => (
             <Picker.Item key={value} label={value} value={value} />

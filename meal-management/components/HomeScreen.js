@@ -55,6 +55,7 @@ export const HomeScreen = () => {
               setSelectedSheet(itemValue);
             }}
             style={styles.picker}
+            dropdownIconColor={"#000"}
           >
             {sheets.map((sheet) => (
               <Picker.Item key={sheet} label={sheet} value={sheet} />
@@ -77,6 +78,7 @@ export const HomeScreen = () => {
             setSelectedSheet(itemValue);
           }}
           style={styles.picker}
+          dropdownIconColor={"#000"}
         >
           {sheets.map((sheet) => (
             <Picker.Item key={sheet} label={sheet} value={sheet} />

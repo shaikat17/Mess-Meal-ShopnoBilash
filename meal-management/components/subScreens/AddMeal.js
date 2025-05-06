@@ -131,6 +131,7 @@ export const AddMeal = () => {
             selectedValue={name}
             onValueChange={(itemValue) => setName(itemValue)}
             style={styles.picker}
+            dropdownIconColor={"#000"}
           >
             {personNames.map((person) => (
               <Picker.Item key={person} label={person} value={person} />

@@ -80,6 +80,7 @@ export const PersonDataScreen = () => {
               setSelectedPerson(itemValue);
             }}
             style={styles.picker}
+            dropdownIconColor={"#000"}
           >
             {personNames.map((personName) => (
               <Picker.Item
@@ -112,6 +113,7 @@ export const PersonDataScreen = () => {
             setSelectedPerson(itemValue);
           }}
           style={styles.picker}
+          dropdownIconColor={"#000"}
         >
           {personNames.map((personName) => (
             <Picker.Item

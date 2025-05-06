@@ -1,7 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
-import { useEffect, useState } from "react";
 import {
     ActivityIndicator,
   RefreshControl,
@@ -43,6 +42,7 @@ export const MonthSummary = () => {
               setSelectedValue(itemValue);
             }}
             style={styles.picker}
+            dropdownIconColor={"#000"}
           >
             {values.map((value) => (
               <Picker.Item key={value} label={value} value={value} />
@@ -71,6 +71,7 @@ export const MonthSummary = () => {
             setSelectedValue(itemValue);
           }}
           style={styles.picker}
+          dropdownIconColor={"#000"}
         >
           {values.map((value) => (
             <Picker.Item key={value} label={value} value={value} />
