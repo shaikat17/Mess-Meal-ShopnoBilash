@@ -1,6 +1,6 @@
 import express from "express";
 import { google } from "googleapis";
-import { getSheetData, writeSheetData, authReadOnly, authWrite } from "../functions/sheetFunctions.js";
+import { getSheetData, writeSheetData, authReadOnly, authWrite, appendSheetData } from "../functions/sheetFunctions.js";
 import config from "../utils/config.js";
 
 const router = express.Router();
@@ -189,7 +189,7 @@ router.post('/addmeal', async (req, res) => {
     const sheetName = req.query.sheetName;
     const { date, name, numOfMeal } = req.body;
 
-    console.log("hello", sheetName, date, name, numOfMeal);
+    // console.log("hello", sheetName, date, name, numOfMeal);
     const columnIndex = {
         0: "B",
         1: "C",
@@ -258,5 +258,54 @@ router.get('/mealtable', async (req, res) => {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
     }
 })
+
+// Route to add bazar
+router.post('/addbazar', async (req, res) => {
+    const sheetName = req.query.sheetName;
+    const { name, amount } = req.body;
+
+    const columnIndex = {
+        0: "J",
+        1: "K",
+        2: "L",
+        3: "M",
+        4: "N",
+        5: "O",
+    }
+
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
+
+    if (!name || !amount) {
+        return res.status(400).json({ error: "Name and amount are required." });
+    }
+
+    try {
+        const data = await getSheetData(sheetName, "J12:O12");
+        const flatNames = data.flat(); // Or: data.map(row => row[0]);
+
+        const rowIndex = flatNames.findIndex(n => n.toLowerCase() === name.toLowerCase());
+
+        if (rowIndex === -1) {
+            return res.status(404).json({ error: "Name not found in sheet." });
+        }
+        
+        const formattedAmount = parseFloat(amount);
+        const columnLetter = columnIndex[rowIndex];
+        const colRange = `${columnLetter}13:${columnLetter}`;
+
+        const colRes = await getSheetData(sheetName, colRange);
+
+        // Find the first empty row
+        const firstEmptyRowIndex = colRes.findIndex(row => row.length === 0 || row[0] === '')+13;
+
+        await writeSheetData(sheetName, `${columnLetter}${firstEmptyRowIndex}`, [[formattedAmount]]);
+
+        res.json({ success: true, message: `Bazar for ${name} added to ${amount}` });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
+    }
+});
 
 export default router;

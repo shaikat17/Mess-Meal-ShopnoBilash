@@ -62,3 +62,21 @@ export const writeSheetData = async (sheetName, range, values) => {
         console.error("Error during writeSheetData:", error.response?.data || error.message);
     }
 }
+
+export const appendSheetData = async (sheetName, range, values) => {
+    try {
+        const sheets = google.sheets({ version: 'v4', auth: authWrite });
+
+        const response = await sheets.spreadsheets.values.append({
+            spreadsheetId: config.spreadsheetId,
+            range: `${sheetName}!${range}`,
+            valueInputOption: 'RAW',
+            resource: {
+                values,
+            },
+        });
+        console.log("Append response:", response.data);
+    } catch (error) {
+        console.error("Error during appendSheetData:", error.response?.data || error.message);
+    }
+}
