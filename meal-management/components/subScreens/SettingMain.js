@@ -13,6 +13,7 @@ export const SettingMain = () => {
     { title: "📈 Analytics", route: "analytics" },
     { title: "👀 View Meal", route: "viewmeal" },
     { title: "🛒 Add Bazar", route: "addbazar" },
+    { title: "🧼 Washroom", route: "washroom" },
     // { title: "⚙️ Preferences", route: "preferences" },
     // { title: "👤 Profile Settings", route: "profilesettings" },
     // { title: "🔔 Notifications", route: "notifications" },

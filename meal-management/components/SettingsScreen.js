@@ -6,6 +6,7 @@ import { AddMeal } from "./subScreens/AddMeal";
 import { Analytics } from "./subScreens/Analytics";
 import { ViewMeal } from "./subScreens/ViewMeal";
 import { AddBazar } from "./subScreens/AddBazar";
+import { Washroom } from "./subScreens/Washroom";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ export function SettingsStack() {
       <Stack.Screen name="analytics" component={Analytics} />
       <Stack.Screen name="viewmeal" component={ViewMeal} />
       <Stack.Screen name="addbazar" component={AddBazar} />
+      <Stack.Screen name="washroom" component={Washroom} />
     </Stack.Navigator>
   );
 }

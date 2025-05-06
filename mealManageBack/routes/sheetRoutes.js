@@ -352,7 +352,7 @@ router.post('/bathroom', async (req, res) => {
         const data = await getSheetData("Toilet Cleaning", 'A1:A'); // pass empty string for sheetName
         const firstEmptyRowIndex = data.length+1;
         
-        await writeSheetData("Toilet Cleaning", `B${firstEmptyRowIndex}`, [[date]]);
+        await writeSheetData("Toilet Cleaning", `A${firstEmptyRowIndex}`, [[date]]);
         res.json({ success: true, message: `Toilet cleaned on ${date} added to list` });
     } catch (error) {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
