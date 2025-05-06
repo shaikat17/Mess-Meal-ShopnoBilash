@@ -325,4 +325,19 @@ router.get('/bazartable', async (req, res) => {
     }
 });  
 
+// Bathroom Responsibility Route
+router.get('/bathroom', async (req, res) => {
+    try {
+        const data = await getSheetData("Toilet Cleaning", 'A1:A'); // pass empty string for sheetName
+        const firstEmptyRowIndex = data.length+1;
+        
+        const nextPerson = await getSheetData("Toilet Cleaning", `B${firstEmptyRowIndex}`);
+
+        const returnPerson = nextPerson?.[0]?.[0] || null;
+        res.json(returnPerson);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
+    }
+});
+
 export default router;
