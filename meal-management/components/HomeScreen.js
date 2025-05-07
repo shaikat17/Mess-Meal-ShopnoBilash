@@ -75,7 +75,6 @@ function getCurrentAndNextPerson(date = new Date('2025-5-26')) {
   //     );
   //   }
 
-  console.log(bazarListData);
 
   if (error || !data || !data.basicData) {
     return (
