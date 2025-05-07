@@ -98,6 +98,7 @@ export const AddBazar = () => {
             keyboardType="numeric"
             value={amount}
             onChangeText={(text) => setAmount(text)}
+            placeholderTextColor="#9ca3af"
           />
           <TouchableOpacity
             style={[styles.backButton, { marginLeft: 10, height: 40 }]}

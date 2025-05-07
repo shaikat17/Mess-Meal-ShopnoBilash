@@ -97,6 +97,7 @@ export const Washroom = () => {
           keyboardType="default"
           value={date}
           onChangeText={(text) => setDate(text)}
+          placeholderTextColor="#9ca3af"
         />
         <TouchableOpacity
           style={[styles.backButton, { marginLeft: 10, height: 40 }]}
