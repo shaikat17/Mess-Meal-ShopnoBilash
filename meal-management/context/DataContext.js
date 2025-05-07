@@ -101,12 +101,10 @@ export const DataProvider = ({ children }) => {
       return;
     }
     const fetchData = async () => {
-      console.log('Call')
       setLoading(true);
       setError(null);
 
       try {
-        console.log('Call2')
         const response = await fetch(`${apiUrl}?sheetName=${selectedSheet}`);
 
         if (!response.ok) {
