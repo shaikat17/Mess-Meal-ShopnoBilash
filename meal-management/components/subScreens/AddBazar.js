@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import {
   ActivityIndicator,
   Alert,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -25,6 +26,9 @@ export const AddBazar = () => {
     loading,
     setLoading,
     bazarTableData,
+    refreshing,
+    handleRefresh,
+    setRefreshing,
   } = useDataContext();
 
   const [amount, setAmount] = useState("");
@@ -51,8 +55,8 @@ export const AddBazar = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
       setLoading(false);
+      setRefreshing(true);
       Alert.alert("Success", data.message, [{ text: "OK" }]);
     } catch (error) {
       setLoading(false);
@@ -111,7 +115,9 @@ export const AddBazar = () => {
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Bazar Table</Text>
               </View>
-      <ScrollView style={styles.tableContainer}>
+      <ScrollView style={styles.tableContainer} refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }>
         {bazarTableData.map((item, rowIndex) => (
           <View key={rowIndex} style={styles.tableRow}>
             {Array.from({ length: 6 }).map((_, colIndex) => (

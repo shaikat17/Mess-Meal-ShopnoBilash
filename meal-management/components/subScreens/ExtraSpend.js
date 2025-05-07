@@ -67,6 +67,7 @@ export const ExtraSpend = () => {
       // console.log(data);
       Alert.alert("Success", data.message, [{ text: "OK" }]);
       setLoading(false);
+      handleRefresh();
     } catch (error) {
       console.error(error);
       setLoading(false);

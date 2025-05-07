@@ -3,37 +3,16 @@ import { createContext, use, useContext, useEffect, useState } from "react";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-  // Main App Functionality Start
-  const [sheets, setSheets] = useState([]);
-
-  const [loading, setLoading] = useState(true);
   // Replace with your actual API endpoint
   // const apiUrl = "http://192.168.1.11:5000/api/sheets";
 
   // const apiUrl = "http://192.168.79.151:5000/api/sheets";
   const apiUrl = "https://meal-manage-back.vercel.app/api/sheets"; // Replace with your actual API endpoint
 
-  useEffect(() => {
-    const fetchSheets = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`${apiUrl}/list`);
-        const result = await response.json();
+  // Main App Functionality Start
+  const [sheets, setSheets] = useState([]);
 
-        setSheets((prevSheets) => {
-          return ["Select Sheet", ...result.slice(0, result.length - 1)];
-        });
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching sheets:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchSheets();
-  }, []);
-
-  // Date functionality
+  const [loading, setLoading] = useState(true);
   const monthsNames = [
     "Jan",
     "Feb",
@@ -61,11 +40,49 @@ export const DataProvider = ({ children }) => {
   const [selectedSheet, setSelectedSheet] = useState(currentSheet);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("Bazar");
+  const [values] = useState([
+    "Bazar",
+    "Meal",
+    "Extra Spend",
+    "Debit",
+    "Total With Extra",
+  ]);
+  const [selectedData, setSelectedData] = useState(null);
+  const [selectedPerson, setSelectedPerson] = useState("Select Person");
+  const [personData, setPersonData] = useState(null);
+  const [personNames, setPersonNames] = useState([]);
+  const [extraSpends, setExtraSpends] = useState({});
+  const [mealTableData, setMealTableData] = useState([]);
+  const [bazarTableData, setBazarTableData] = useState([]);
+  const [bazarListData, setBazarListData] = useState([]);
+  
+
+  useEffect(() => {
+    const fetchSheets = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${apiUrl}/list`);
+        const result = await response.json();
+
+        setSheets((prevSheets) => {
+          return ["Select Sheet", ...result.slice(0, result.length - 1)];
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching sheets:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSheets();
+  }, []);
 
   const handleRefresh = () => {
     setRefreshing(true);
   };
 
+  // Fetch data when selectedSheet changes
   useEffect(() => {
     if (!selectedSheet || selectedSheet === "Select Sheet") {
       return;
@@ -92,122 +109,13 @@ export const DataProvider = ({ children }) => {
       } finally {
         setLoading(false);
         setRefreshing(false); // Reset refreshing state
-        console.log("Fetch completed"); // Debug: Print completion
       }
     };
 
     fetchData();
   }, [selectedSheet, refreshing]);
 
-  // Main App Functionality End
-
-  // Monthly Summary Functionality Start
-  const [selectedValue, setSelectedValue] = useState("Bazar");
-  const [values] = useState([
-    "Bazar",
-    "Meal",
-    "Extra Spend",
-    "Debit",
-    "Total With Extra",
-  ]);
-  const [selectedData, setSelectedData] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    switch (selectedValue) {
-      case "Bazar":
-        setSelectedData({
-          Name: "Amount",
-          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.totalBazar,
-          [[personNames[3]]]:
-            data?.[[personNames[3].toLowerCase()]]?.totalBazar,
-          [[personNames[2]]]:
-            data?.[[personNames[2].toLowerCase()]]?.totalBazar,
-          [[personNames[6]]]:
-            data?.[[personNames[6].toLowerCase()]]?.totalBazar,
-          [[personNames[5]]]:
-            data?.[[personNames[5].toLowerCase()]]?.totalBazar,
-          [[personNames[4]]]:
-            data?.[[personNames[4].toLowerCase()]]?.totalBazar,
-        });
-        setLoading(false);
-        break;
-      case "Meal":
-        setSelectedData({
-          Name: "Amount",
-          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.totalMeal,
-          [[personNames[3]]]: data?.[[personNames[3].toLowerCase()]]?.totalMeal,
-          [[personNames[2]]]: data?.[[personNames[2].toLowerCase()]]?.totalMeal,
-          [[personNames[6]]]: data?.[[personNames[6].toLowerCase()]]?.totalMeal,
-          [[personNames[5]]]: data?.[[personNames[5].toLowerCase()]]?.totalMeal,
-          [[personNames[4]]]: data?.[[personNames[4].toLowerCase()]]?.totalMeal,
-        });
-        setLoading(false);
-        break;
-      case "Extra Spend":
-        setSelectedData({
-          Name: "Amount",
-          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.extraSpend,
-          [[personNames[3]]]:
-            data?.[[personNames[3].toLowerCase()]]?.extraSpend,
-          [[personNames[2]]]:
-            data?.[[personNames[2].toLowerCase()]]?.extraSpend,
-          [[personNames[6]]]:
-            data?.[[personNames[6].toLowerCase()]]?.extraSpend,
-          [[personNames[5]]]:
-            data?.[[personNames[5].toLowerCase()]]?.extraSpend,
-          [[personNames[4]]]:
-            data?.[[personNames[4].toLowerCase()]]?.extraSpend,
-        });
-        setLoading(false);
-        break;
-      case "Debit":
-        setSelectedData({
-          Name: "Amount",
-          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.debitCredit,
-          [[personNames[3]]]:
-            data?.[[personNames[3].toLowerCase()]]?.debitCredit,
-          [[personNames[2]]]:
-            data?.[[personNames[2].toLowerCase()]]?.debitCredit,
-          [[personNames[6]]]:
-            data?.[[personNames[6].toLowerCase()]]?.debitCredit,
-          [[personNames[5]]]:
-            data?.[[personNames[5].toLowerCase()]]?.debitCredit,
-          [[personNames[4]]]:
-            data?.[[personNames[4].toLowerCase()]]?.debitCredit,
-        });
-        setLoading(false);
-        break;
-      case "Total With Extra":
-        setSelectedData({
-          Name: "Amount",
-          [personNames[1]]: data?.[[personNames[1].toLowerCase()]]?.totalExtra,
-          [[personNames[3]]]:
-            data?.[[personNames[3].toLowerCase()]]?.totalExtra,
-          [[personNames[2]]]:
-            data?.[[personNames[2].toLowerCase()]]?.totalExtra,
-          [[personNames[6]]]:
-            data?.[[personNames[6].toLowerCase()]]?.totalExtra,
-          [[personNames[5]]]:
-            data?.[[personNames[5].toLowerCase()]]?.totalExtra,
-          [[personNames[4]]]:
-            data?.[[personNames[4].toLowerCase()]]?.totalExtra,
-        });
-        setLoading(false);
-        break;
-      default:
-        setSelectedData(null);
-        setLoading(false);
-    }
-  }, [selectedValue, data, personNames]);
-
-  // Monthly Summary Functionality End
-
-  // Person Data Functionality Start
-
-  const [selectedPerson, setSelectedPerson] = useState("Select Person");
-  const [personData, setPersonData] = useState(null);
-  const [personNames, setPersonNames] = useState([]);
+  // Getting person names
 
   useEffect(() => {
     const fetchPersonNames = async () => {
@@ -227,7 +135,43 @@ export const DataProvider = ({ children }) => {
       }
     };
     fetchPersonNames();
-  }, [selectedSheet, data]);
+  }, [selectedSheet]);
+
+  
+
+
+  // Monthly Summary Functionality Start
+
+  useEffect(() => {
+    setLoading(true);
+  
+    const fieldMap = {
+      "Bazar": "totalBazar",
+      "Meal": "totalMeal",
+      "Extra Spend": "extraSpend",
+      "Debit": "debitCredit",
+      "Total With Extra": "totalExtra",
+    };
+  
+    const field = fieldMap[selectedValue];
+  
+    if (field) {
+      const selected = { Name: "Amount" };
+  
+      personNames.slice(1).forEach(name => {
+        selected[name] = data?.[name.toLowerCase()]?.[field];
+      });
+  
+      setSelectedData(selected);
+    } else {
+      setSelectedData(null);
+    }
+  
+    setLoading(false);
+  }, [selectedValue, data]);
+  
+
+  // Monthly Summary Functionality End
 
   useEffect(() => {
     if (selectedPerson === "Select Person") {
@@ -242,37 +186,14 @@ export const DataProvider = ({ children }) => {
   // Person Data Functionality End
 
   // Extra Cost Functionality Start
-  const [extraSpends, setExtraSpends] = useState({
-    [personNames[1]]:
-      data?.[[personNames[1].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[3]]]:
-      data?.[[personNames[3].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[2]]]:
-      data?.[[personNames[2].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[6]]]:
-      data?.[[personNames[6].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[5]]]:
-      data?.[[personNames[5].toLowerCase()]]?.extraSpend?.toString() || "",
-    [[personNames[4]]]:
-      data?.[[personNames[4].toLowerCase()]]?.extraSpend?.toString() || "",
-  });
 
   useEffect(() => {
     if (data) {
-      setExtraSpends({
-        [personNames[1]]:
-          data?.[[personNames[1].toLowerCase()]]?.extraSpend?.toString() || "",
-        [[personNames[3]]]:
-          data?.[[personNames[3].toLowerCase()]]?.extraSpend?.toString() || "",
-        [[personNames[2]]]:
-          data?.[[personNames[2].toLowerCase()]]?.extraSpend?.toString() || "",
-        [[personNames[6]]]:
-          data?.[[personNames[6].toLowerCase()]]?.extraSpend?.toString() || "",
-        [[personNames[5]]]:
-          data?.[[personNames[5].toLowerCase()]]?.extraSpend?.toString() || "",
-        [[personNames[4]]]:
-          data?.[[personNames[4].toLowerCase()]]?.extraSpend?.toString() || "",
+      const extraSpends = {};
+      personNames.slice(1).forEach((name) => {
+        extraSpends[name] = data[name.toLowerCase()].extraSpend === '' ? '৳0.00' : data[name.toLowerCase()].extraSpend;
       });
+      setExtraSpends(extraSpends);
     }
   }, [data]);
 
@@ -280,99 +201,93 @@ export const DataProvider = ({ children }) => {
 
   // Meal Table Functionality Start
 
-  const [mealTableData, setMealTableData] = useState([]);
-
   useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await fetch(
-            `${apiUrl}/mealtable?sheetName=${selectedSheet}`
-          );
-          if (!response.ok) {
-            throw new Error(`Failed to fetch data: ${response.status}`);
-          }
-          const result = await response.json();
-          setMealTableData(result);
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `${apiUrl}/mealtable?sheetName=${selectedSheet}`
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.status}`);
         }
-      };
-  
-      if (selectedSheet) {
-        //prevent the api call with empty selectedSheet
-        fetchData();
+        const result = await response.json();
+        setMealTableData(result);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
+    };
+
+    if (selectedSheet) {
+      //prevent the api call with empty selectedSheet
+      fetchData();
+    }
   }, [selectedSheet]);
 
   // Meal Table Functionality End
 
   // Bazar Table Functionality Start
 
-  const [bazarTableData, setBazarTableData] = useState([]);
-
   useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await fetch(
-            `${apiUrl}/bazartable?sheetName=${selectedSheet}`
-          );
-          if (!response.ok) {
-            throw new Error(`Failed to fetch data: ${response.status}`);
-          }
-          const result = await response.json();
-          // console.log(result)
-          setBazarTableData(result);
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `${apiUrl}/bazartable?sheetName=${selectedSheet}`
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.status}`);
         }
-      };
-  
-      if (selectedSheet) {
-        //prevent the api call with empty selectedSheet
-        fetchData();
+        const result = await response.json();
+        // console.log(result)
+        setBazarTableData(result);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-    }, [selectedSheet]);
+    };
+
+    if (selectedSheet) {
+      //prevent the api call with empty selectedSheet
+      fetchData();
+    }
+  }, [selectedSheet, refreshing]);
 
   // Bazar Table Functionality End
 
   // Bazar List Schedule Functionality Start
-  const [bazarListData, setBazarListData] = useState([]);
 
   useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await fetch(
-            `${apiUrl}/bazarlist?sheetName=${selectedSheet}`
-          );
-          if (!response.ok) {
-            throw new Error(`Failed to fetch data: ${response.status}`);
-          }
-          const result = await response.json();
-          // console.log(result)
-          setBazarListData(result);
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `${apiUrl}/bazarlist?sheetName=${selectedSheet}`
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.status}`);
         }
-      };
-    
-      if (selectedSheet) {
-        //prevent the api call with empty selectedSheet
-        fetchData();
+        const result = await response.json();
+        // console.log(result)
+        setBazarListData(result);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
+    };
+
+    if (selectedSheet) {
+      //prevent the api call with empty selectedSheet
+      fetchData();
+    }
   }, [selectedSheet]);
-  
 
   return (
     <DataContext.Provider
@@ -399,7 +314,8 @@ export const DataProvider = ({ children }) => {
         setExtraSpends,
         mealTableData,
         bazarTableData,
-        bazarListData
+        bazarListData,
+        setRefreshing,
       }}
     >
       {children}

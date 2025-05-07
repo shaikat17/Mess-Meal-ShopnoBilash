@@ -27,10 +27,10 @@ export const  getSheetData = async (sheetName, range) => {
 
         const values = response.data.values;
         if (!values) {
-            console.log(`No data found in sheet "${sheetName}", range "${range}".`);
+            // console.log(`No data found in sheet "${sheetName}", range "${range}".`);
             return [];
         }
-        console.log(`Data from sheet "${sheetName}", range "${range}":`);
+        // console.log(`Data from sheet "${sheetName}", range "${range}":`);
         // values.forEach(row => console.log(row)); //  Consider NOT logging the data here, return it.
         return values;
 
@@ -57,7 +57,7 @@ export const writeSheetData = async (sheetName, range, values) => {
             },
         });
 
-        console.log("Update response:", response.data);
+        // console.log("Update response:", response.data);
     } catch (error) {
         console.error("Error during writeSheetData:", error.response?.data || error.message);
     }
@@ -75,7 +75,7 @@ export const appendSheetData = async (sheetName, range, values) => {
                 values,
             },
         });
-        console.log("Append response:", response.data);
+        // console.log("Append response:", response.data);
     } catch (error) {
         console.error("Error during appendSheetData:", error.response?.data || error.message);
     }

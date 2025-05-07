@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
   try {
     const data1 = await getSheetData(sheetName, "L2:L7");
     const names = data1.flat();
-    console.log("🚀 ~ router.get ~ names:", names);
+    // console.log("🚀 ~ router.get ~ names:", names);
 
     const data = await getSheetData(sheetName, "A1:R44"); //changed here
     const Mealdata = {
@@ -134,7 +134,7 @@ router.get("/list", async (req, res) => {
 router.get("/all", async (req, res) => {
   const sheetName = req.query.sheetName; // e.g., "April 25"
   const range = req.query.range || "A1:R44"; // Default range if not provided
-  console.log(sheetName);
+  // console.log(sheetName);
   if (!sheetName) {
     return res.status(400).json({ error: "Sheet name is required." });
   }
@@ -235,7 +235,7 @@ router.post("/addmeal", async (req, res) => {
     const result2 = await getSheetData(sheetName, "B11:G42");
     const names = result2[0].flat();
 
-    console.log(date, name, numOfMeal);
+    // console.log(date, name, numOfMeal);
 
     const dateIndex = dates.findIndex(
       (d) => d.toLowerCase() === date.toLowerCase()
@@ -279,11 +279,11 @@ router.get("/mealtable", async (req, res) => {
   try {
     const data = await getSheetData(sheetName, "A11:G42");
 
-    data.map((row) => {
-      row.map((item, index) => {
-        console.log(item);
-      });
-    });
+    // data.map((row) => {
+    //   row.map((item, index) => {
+    //     console.log(item);
+    //   });
+    // });
 
     res.json(data);
   } catch (error) {

@@ -41,13 +41,6 @@ function getCurrentAndNextPerson(date = new Date()) {
   const endDay = Math.min(startDay + 4, daysInMonth);
   const monthName = format(date, 'MMMM');
 
-  console.log("pairIndex:", pairIndex);
-  console.log("currentIndex:", currentIndex);
-  console.log("nextIndex:", nextIndex);
-  console.log("startDay:", startDay);
-  console.log("endDay:", endDay);
-  console.log("monthName:", monthName);
-
   return {
     current: bazarListData[currentIndex],
     next: bazarListData[startDay >= 26 ? 2 : nextIndex],

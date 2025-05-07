@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 });
 
 cron.schedule(
-  '15 15 7 * *',
+  '0 12 28 * *',
   async () => {
     try {
       console.log("Running API call on 28th...");
@@ -30,7 +30,7 @@ cron.schedule(
       });
 
       const data = await response.json();
-      console.log("API call completed:", data);
+      console.log("API call completed:");
     } catch (error) {
       console.error("Error during scheduled API call:", error.message);
     }
