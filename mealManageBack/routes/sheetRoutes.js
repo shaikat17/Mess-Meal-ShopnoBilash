@@ -368,7 +368,7 @@ router.get('/bazarlist', async (req, res) => {
     }
     try {
         const data = await getSheetData(sheetName, 'J10:O10'); // pass empty string for sheetName
-        res.json(data);
+        res.json(data.flat());
     } catch (error) {
         res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
     }

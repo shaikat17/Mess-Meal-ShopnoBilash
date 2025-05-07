@@ -10,17 +10,54 @@ import {
   View,
 } from "react-native";
 import { useDataContext } from "../context/DataContext";
+import { format } from "date-fns";
 
 export const HomeScreen = () => {
-  const { data,
+  const {
+    data,
     loading,
     error,
     sheets,
     selectedSheet,
     setSelectedSheet,
     handleRefresh,
-    refreshing } = useDataContext();
-  
+    refreshing,
+    bazarListData,
+  } = useDataContext();
+
+
+function getCurrentAndNextPerson(date = new Date('2025-5-26')) {
+
+  const year = date.getFullYear();
+  const month = date.getMonth(); // 0-indexed (0 = Jan, 1 = Feb, ...)
+  const day = date.getDate();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get last day of current month
+  const pairIndex = Math.floor((day - 1) / 5);
+  const currentIndex = pairIndex % bazarListData.length;
+  const nextIndex = (currentIndex + 1) % bazarListData.length;
+
+  const startDay = pairIndex * 5 + 1;
+  const endDay = Math.min(startDay + 4, daysInMonth);
+  const monthName = format(date, 'MMMM');
+
+  console.log("pairIndex:", pairIndex);
+  console.log("currentIndex:", currentIndex);
+  console.log("nextIndex:", nextIndex);
+  console.log("startDay:", startDay);
+  console.log("endDay:", endDay);
+  console.log("monthName:", monthName);
+
+  return {
+    current: bazarListData[currentIndex],
+    next: bazarListData[startDay >= 26 ? 2 : nextIndex],
+    dateRange: `${daysInMonth === 31 && startDay >= 26 ? "26" : startDay}–${daysInMonth === 31 && startDay >= 26 ? "31" : endDay} ${monthName}`,
+  };
+}
+
+
+  const { current, next, dateRange } = getCurrentAndNextPerson();
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -37,16 +74,18 @@ export const HomeScreen = () => {
   //       </View>
   //     );
   //   }
-  
+
+  console.log(bazarListData);
+
   if (error || !data || !data.basicData) {
     return (
-        <View style={styles.noContainer}>
-             <LottieView
-                    source={require('../assets/json/notfound.json')} // your .json file
-                    autoPlay
-                    loop
-                    style={{ width: 200, height: 200 }}
-                  />
+      <View style={styles.noContainer}>
+        <LottieView
+          source={require("../assets/json/notfound.json")} // your .json file
+          autoPlay
+          loop
+          style={{ width: 200, height: 200 }}
+        />
         <Text style={styles.noDataText}>No Basic Data Available</Text>
         <View style={styles.pickerContainer}>
           <Picker
@@ -85,12 +124,12 @@ export const HomeScreen = () => {
           ))}
         </Picker>
       </View>
-          <ScrollView style={{ width: "100%" }} refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-            />
-      }>
+      <ScrollView
+        style={{ width: "100%", marginBottom: 0 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
         <View style={styles.tableContainer}>
           <View style={styles.tableRow}>
             <Text style={styles.cell}>Month</Text>
@@ -122,6 +161,20 @@ export const HomeScreen = () => {
           </View>
         </View>
       </ScrollView>
+
+      <View style={styles.containerCard}>
+        <Text style={styles.cardTitle}>Bazar Schedule ({dateRange})</Text>
+
+        <View style={styles.card}>
+          <Text style={styles.label}>🧍 Current in Line</Text>
+          <Text style={styles.nameCurrent}>{current}</Text>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.label}>⏭️ Next in Line</Text>
+          <Text style={styles.nameNext}>{next}</Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -178,7 +231,7 @@ const styles = StyleSheet.create({
     color: "#888",
     textAlign: "center",
   },
-  
+
   pickerContainer: {
     width: 200,
     height: 60,
@@ -208,5 +261,46 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     fontSize: 16,
+  },
+  containerCard: {
+    padding: 10,
+    backgroundColor: "#F9FAFB",
+    width: "90%",
+
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#03A791",
+    textDecorationLine: "underline",
+  },
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#4B5563",
+    marginBottom: 8,
+  },
+  nameCurrent: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: "#2563EB",
+  },
+  nameNext: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: "#10B981",
   },
 });

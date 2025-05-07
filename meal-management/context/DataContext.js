@@ -343,6 +343,37 @@ export const DataProvider = ({ children }) => {
 
   // Bazar Table Functionality End
 
+  // Bazar List Schedule Functionality Start
+  const [bazarListData, setBazarListData] = useState([]);
+
+  useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await fetch(
+            `${apiUrl}/bazarlist?sheetName=${selectedSheet}`
+          );
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data: ${response.status}`);
+          }
+          const result = await response.json();
+          // console.log(result)
+          setBazarListData(result);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      if (selectedSheet) {
+        //prevent the api call with empty selectedSheet
+        fetchData();
+      }
+  }, [selectedSheet]);
+  
+
   return (
     <DataContext.Provider
       value={{
@@ -367,7 +398,8 @@ export const DataProvider = ({ children }) => {
         extraSpends,
         setExtraSpends,
         mealTableData,
-        bazarTableData
+        bazarTableData,
+        bazarListData
       }}
     >
       {children}
