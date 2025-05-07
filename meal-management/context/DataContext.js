@@ -56,9 +56,21 @@ export const DataProvider = ({ children }) => {
   const [mealTableData, setMealTableData] = useState([]);
   const [bazarTableData, setBazarTableData] = useState([]);
   const [bazarListData, setBazarListData] = useState([]);
-  
+
+  const checkMonth = () => {
+    const currentMonth = today.getMonth(); // Months are 0-indexed
+    const currentYear = today.getFullYear();
+    const currentYearString = String(currentYear).substring(2);
+    const currentData = monthsNames[currentMonth];
+    const monthIndex = monthsNames.indexOf(currentData);
+    const [selectedMonth, year] = selectedSheet.split(" ");
+    const selectedMonthIndex = monthsNames.indexOf(selectedMonth);
+    
+    return selectedMonthIndex > monthIndex || year > currentYearString ? -1 : 1;
+  };
 
   useEffect(() => {
+
     const fetchSheets = async () => {
       setLoading(true);
       try {
@@ -84,14 +96,17 @@ export const DataProvider = ({ children }) => {
 
   // Fetch data when selectedSheet changes
   useEffect(() => {
-    if (!selectedSheet || selectedSheet === "Select Sheet") {
+    if (!selectedSheet || selectedSheet === "Select Sheet" || checkMonth() === -1) {
+      setData(null);
       return;
     }
     const fetchData = async () => {
+      console.log('Call')
       setLoading(true);
       setError(null);
 
       try {
+        console.log('Call2')
         const response = await fetch(`${apiUrl}?sheetName=${selectedSheet}`);
 
         if (!response.ok) {
@@ -119,6 +134,9 @@ export const DataProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchPersonNames = async () => {
+      if (!selectedSheet || selectedSheet === "Select Sheet" || checkMonth() === -1) {
+        return;
+      }
       setLoading(true);
       try {
         const response = await fetch(

@@ -30,8 +30,6 @@ export const MonthSummary = () => {
       <View style={styles.noContainer}>
         <LottieView
           source={require("../../assets/json/notfound.json")}
-          autoPlay
-          loop
           style={{ width: 200, height: 200 }}
         />
         <Text style={styles.noDataText}>No Basic Data Available</Text>

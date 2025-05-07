@@ -31,6 +31,7 @@ export const Analytics = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    if (!data) return;
     if (selectedData) {
       const colors = [
         "#F44336",

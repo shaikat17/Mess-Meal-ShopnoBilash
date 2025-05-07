@@ -2,6 +2,7 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDataContext } from "../../context/DataContext";
 import { useNavigation } from "@react-navigation/native";
+import LottieView from "lottie-react-native";
 
 export const ViewMeal = () => {
   const { selectedSheet, loading, error, data, mealTableData } = useDataContext();
@@ -32,14 +33,22 @@ export const ViewMeal = () => {
 
   if (!data || data.length === 0) {
     return (
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>View Meal Table</Text>
+      
+      <View style={styles.noDataContainer}>
+        <LottieView
+                  source={require("../../assets/json/notfound.json")}
+                  style={{ width: 200, height: 200 }}
+                />
+        <Text style={styles.noDataText}>No meal data available.</Text>
+        <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate("SettingMain")}
+      >
+        <Text style={styles.backButtonText}>Back to Settings</Text>
+      </TouchableOpacity>
         </View>
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>No meal data available.</Text>
-        </View>
-      </View>
+        
+     
     );
   }
 

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useDataContext } from "../../context/DataContext";
 import { useNavigation } from "@react-navigation/native";
+import LottieView from "lottie-react-native";
 
 export const ExtraSpend = () => {
   const {
@@ -86,7 +87,7 @@ export const ExtraSpend = () => {
   if (error) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Error: {error.message}</Text>
+        <Text style={styles.errorText}>Error: {error.message}</Text>
       </View>
     );
   }
@@ -94,7 +95,17 @@ export const ExtraSpend = () => {
   if (!data) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>No data available</Text>
+        <LottieView
+          source={require("../../assets/json/notfound.json")}
+          style={{ width: 200, height: 200 }}
+        />
+        <Text style={styles.noDataText}>No data available</Text>
+        <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate("SettingMain")}
+      >
+        <Text style={styles.backButtonText}>Back to Settings</Text>
+      </TouchableOpacity>
       </View>
     );
   }
@@ -230,5 +241,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  noDataText: {
+    margin: 10,
+    fontSize: 16,
+    fontStyle: "italic",
+    color: "#888",
+    textAlign: "center",
   },
 });

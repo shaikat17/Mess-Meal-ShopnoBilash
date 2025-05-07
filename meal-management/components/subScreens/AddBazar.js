@@ -13,6 +13,7 @@ import {
 import { useDataContext } from "../../context/DataContext";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
+import LottieView from "lottie-react-native";
 
 export const AddBazar = () => {
   const navigation = useNavigation();
@@ -29,6 +30,7 @@ export const AddBazar = () => {
     refreshing,
     handleRefresh,
     setRefreshing,
+    data,
   } = useDataContext();
 
   const [amount, setAmount] = useState("");
@@ -74,6 +76,26 @@ export const AddBazar = () => {
     );
   }
 
+  if (!data || data.length === 0) {
+    return (
+      <View style={styles.noContainer}>
+        <LottieView
+          source={require("../../assets/json/notfound.json")}
+          autoPlay
+          loop
+          style={{ width: 200, height: 200 }}
+        />
+        <Text style={styles.noDataText}>No Basic Data Available</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate("SettingMain")}
+        >
+          <Text style={styles.backButtonText}>Back to Settings</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -112,12 +134,15 @@ export const AddBazar = () => {
           </TouchableOpacity>
         </View>
       </View>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>Bazar Table</Text>
-              </View>
-      <ScrollView style={styles.tableContainer} refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Bazar Table</Text>
+      </View>
+      <ScrollView
+        style={styles.tableContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
         {bazarTableData.map((item, rowIndex) => (
           <View key={rowIndex} style={styles.tableRow}>
             {Array.from({ length: 6 }).map((_, colIndex) => (

@@ -15,9 +15,10 @@ import { Picker } from "@react-native-picker/picker";
 import { format, set } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import { useDataContext } from "../../context/DataContext";
+import LottieView from "lottie-react-native";
 
 export const AddMeal = () => {
-    const { personNames, apiUrl, selectedSheet, loading, setLoading } = useDataContext();
+    const { personNames, apiUrl, selectedSheet, loading, setLoading, data } = useDataContext();
   const [date, setDate] = useState(new Date()); // Initialize with a default date
   const [name, setName] = useState("");
   const [numOfMeal, setnumOfMeal] = useState();
@@ -88,7 +89,27 @@ export const AddMeal = () => {
             <Text>Loading data...</Text>
           </View>
         );
-      }
+    }
+  
+  if (!data) {
+    return (
+      <View style={styles.noContainer}>
+        <LottieView
+          source={require("../../assets/json/notfound.json")}
+          autoPlay
+          loop
+          style={{ width: 200, height: 200 }}
+        />
+        <Text style={styles.noDataText}>No Basic Data Available</Text>
+        <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.navigate("SettingMain")}
+              >
+                <Text style={styles.backButtonText}>Back to Settings</Text>
+              </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -170,6 +191,16 @@ export const AddMeal = () => {
 };
 
 const styles = StyleSheet.create({
+  noContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noDataText: {
+    fontSize: 16,
+    color: "#808080",
+    marginTop: 20,
+  },
   dateNameContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
