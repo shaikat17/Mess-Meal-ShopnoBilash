@@ -241,7 +241,7 @@ export const DataProvider = ({ children }) => {
       //prevent the api call with empty selectedSheet
       fetchData();
     }
-  }, [selectedSheet]);
+  }, [selectedSheet, refreshing]);
 
   // Meal Table Functionality End
 

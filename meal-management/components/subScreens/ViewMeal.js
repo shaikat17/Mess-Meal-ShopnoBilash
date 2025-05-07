@@ -1,11 +1,11 @@
 
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDataContext } from "../../context/DataContext";
 import { useNavigation } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 
 export const ViewMeal = () => {
-  const { selectedSheet, loading, error, data, mealTableData } = useDataContext();
+  const { selectedSheet, loading, error, data, mealTableData, refreshing, handleRefresh } = useDataContext();
 
   const navigation = useNavigation();
 
@@ -57,7 +57,7 @@ export const ViewMeal = () => {
       <View style={styles.titleContainer}>
         <Text style={styles.title}>View Meal Table of {selectedSheet}</Text>
       </View>
-      <ScrollView style={styles.tableContainer}>
+      <ScrollView style={styles.tableContainer} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
         {mealTableData.map((item, index) => (
           <View key={index} style={styles.tableRow}>
           {item.map((subItem, subIndex) => (
