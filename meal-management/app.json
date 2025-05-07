@@ -2,7 +2,7 @@
   "expo": {
     "name": "Meal Info",
     "slug": "meal-management",
-    "version": "6.0.1",
+    "version": "6.2.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
