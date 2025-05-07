@@ -26,7 +26,7 @@ export const HomeScreen = () => {
   } = useDataContext();
 
 
-function getCurrentAndNextPerson(date = new Date('2025-5-26')) {
+function getCurrentAndNextPerson(date = new Date()) {
 
   const year = date.getFullYear();
   const month = date.getMonth(); // 0-indexed (0 = Jan, 1 = Feb, ...)

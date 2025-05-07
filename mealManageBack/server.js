@@ -20,12 +20,12 @@ app.get("/", (req, res) => {
 });
 
 cron.schedule(
-  '9 15 7 * *',
+  '15 15 7 * *',
   async () => {
     try {
       console.log("Running API call on 28th...");
 
-      const response = await fetch("http://localhost:5000/api/sheets/bazarlist", {
+      const response = await fetch("https://meal-manage-back.vercel.app/api/sheets/bazarlist", {
         method: "POST",
       });
 
