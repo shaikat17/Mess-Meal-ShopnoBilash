@@ -115,7 +115,7 @@ export const Washroom = () => {
           style={styles.lottie}
         />
         <Text style={styles.nextPersonName}>
-          {nextPerson || "No data available"}
+          {nextPerson || "Loading..."}
         </Text>
       </View>
 

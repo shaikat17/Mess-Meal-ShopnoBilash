@@ -359,4 +359,37 @@ router.post('/bathroom', async (req, res) => {
     }
 });
 
+// Bazar List
+router.get('/bazarlist', async (req, res) => {
+    const sheetName = req.query.sheetName;
+
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
+    try {
+        const data = await getSheetData(sheetName, 'J10:O10'); // pass empty string for sheetName
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
+    }
+});
+
+// Set bazar list
+router.post('/bazarlist', async (req, res) => {
+    // const sheetName = req.query.sheetName;
+    const sheetName = "June 25";
+    const names = ["Shaikat", "Ajoy", "Himel", "Pranto", "Somir", "Shanto"];
+
+    if (!sheetName) {
+        return res.status(400).json({ error: "Sheet name is required." });
+    }
+
+    try {
+        await writeSheetData(sheetName, "J10", [names]);
+        res.json({ success: true, message: `Bazar list set for ${sheetName}` });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to retrieve data from Google Sheets" });
+    }
+});
+
 export default router;
