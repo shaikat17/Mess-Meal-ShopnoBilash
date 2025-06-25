@@ -463,6 +463,7 @@ router.post("/bazarlist", async (req, res) => {
     const names = data.flat(); // Or: data.map(row => row[0]);
 
     const rearranged = [...names.slice(2), names[1], names[0]];
+    // console.log("🚀 ~ router.post ~ rearranged:", rearranged);
     await writeSheetData(nextSheetName, "J10", [rearranged]);
       res.json({ success: true, message: `Bazar list set for ${nextSheetName}` });
   } catch (error) {

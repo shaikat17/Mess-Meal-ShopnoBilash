@@ -33,8 +33,8 @@ export const scheduleDailyReminder = async () => {
         body: 'Don’t forget to log today’s expenses!',
       },
       trigger: {
-        hour: 21,
-        minute: 0,
+        hour: 23,
+        minute: 59,
         repeats: true,
       },
     });

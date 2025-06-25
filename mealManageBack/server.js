@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 });
 
 cron.schedule(
-  '0 12 28 * *',
+  '00 14 28 * *',
   async () => {
     try {
       console.log("Running API call on 28th...");

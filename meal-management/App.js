@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {  useEffect } from "react";
 import {
   StyleSheet,
   Platform,
@@ -13,10 +13,15 @@ import { HomeScreen } from "./components/HomeScreen";
 import { SettingsStack } from "./components/SettingsScreen";
 import { PersonDataScreen } from "./components/PersonDataScreen";
 import { DataProvider } from "./context/DataContext";
+import { scheduleDailyReminder } from "./utils/NotificationUtils";
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
+
+  useEffect(() => {
+    scheduleDailyReminder();
+  },[])
 
   return (
     <SafeAreaView style={styles.mainContainer}>

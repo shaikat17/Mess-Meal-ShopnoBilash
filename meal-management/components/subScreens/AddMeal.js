@@ -18,16 +18,16 @@ import { useDataContext } from "../../context/DataContext";
 import LottieView from "lottie-react-native";
 
 export const AddMeal = () => {
-    const { personNames, apiUrl, selectedSheet, loading, setLoading, data } = useDataContext();
+  const { personNames, apiUrl, selectedSheet, loading, setLoading, data } =
+    useDataContext();
   const [date, setDate] = useState(new Date()); // Initialize with a default date
   const [name, setName] = useState("");
   const [numOfMeal, setnumOfMeal] = useState();
   const [showDatePicker, setShowDatePicker] = useState(false); // State to control date picker visibility
- 
 
   const navigation = useNavigation();
 
-    const handleAddMeal = useCallback(async () => {
+  const handleAddMeal = useCallback(async () => {
     if (!date) {
       Alert.alert("Error", "Please select a date.");
       return;
@@ -40,57 +40,53 @@ export const AddMeal = () => {
       Alert.alert("Error", "Please enter a valid number of meals.");
       return;
     }
-        setLoading(true);
+    setLoading(true);
     const formattedDate = format(date, "d-MMM-yyyy");
-      try {
-        const response = await fetch(
-          `${apiUrl}/addmeal?sheetName=${selectedSheet}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ date:formattedDate, name, numOfMeal }),
-          }
-        );
-          const data = await response.json();
-          Alert.alert("Success", data.message, [{ text: "OK" }]);
-          setLoading(false);
-      } catch (error) {
-          console.error(error);
-          Alert.alert("Error", error.error, [{ text: "OK" }]);
-          setLoading(false);
-      }
-    setDate(new Date());
+    try {
+      const response = await fetch(
+        `${apiUrl}/addmeal?sheetName=${selectedSheet}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ date: formattedDate, name, numOfMeal }),
+        }
+      );
+      const data = await response.json();
+      Alert.alert("Success", data.message, [{ text: "OK" }]);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", error.error, [{ text: "OK" }]);
+      setLoading(false);
+    }
     setName("");
     setnumOfMeal(undefined);
   }, [date, name, numOfMeal]);
 
-    const onChangeDate = (event, selectedDate) => {
-    setShowDatePicker(false);
-    if (Platform.OS === "ios") {
-      // For iOS, the date picker doesn't automatically close
-      setShowDatePicker(false);
+  const onChangeDate = (event, selectedDate) => {
+    setDate(selectedDate || date); // Update the date state with the selected date
+    
+    if (event.type === "set" || event.type === "dismissed") {
+      setShowDatePicker(false); // Hide the date picker after selection
     }
-
-        if (selectedDate) {
-      setDate(selectedDate);
-    }
+    
   };
 
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
-    
-    if (loading) {
-        return (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0000ff" />
-            <Text>Loading data...</Text>
-          </View>
-        );
-    }
-  
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading data...</Text>
+      </View>
+    );
+  }
+
   if (!data) {
     return (
       <View style={styles.noContainer}>
@@ -102,11 +98,11 @@ export const AddMeal = () => {
         />
         <Text style={styles.noDataText}>No Basic Data Available</Text>
         <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => navigation.navigate("SettingMain")}
-              >
-                <Text style={styles.backButtonText}>Back to Settings</Text>
-              </TouchableOpacity>
+          style={styles.backButton}
+          onPress={() => navigation.navigate("SettingMain")}
+        >
+          <Text style={styles.backButtonText}>Back to Settings</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -133,7 +129,7 @@ export const AddMeal = () => {
                 mode="date"
                 display="default"
                 onChange={onChangeDate}
-                              style={styles.datePicker}
+                style={styles.datePicker}
               />
             )}
           </View>
@@ -251,7 +247,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    },
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
@@ -339,4 +335,3 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
