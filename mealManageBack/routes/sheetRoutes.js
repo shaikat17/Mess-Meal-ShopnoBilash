@@ -417,7 +417,68 @@ router.post("/bathroom", async (req, res) => {
 
 // Bazar List
 router.get("/bazarlist", async (req, res) => {
+
   const sheetName = req.query.sheetName;
+
+  // Functionality to set bazar list on 28th of every month
+  // console.log('Hello from bazar list');
+  const tdate = new Date();
+  const date = tdate.getDate();
+  const todayKey = tdate.toDateString(); // e.g., "Sun Jun 30 2025"
+
+  // console.log(tdate, date);
+
+  try {
+
+    // Get the last run date from the sheet
+    const [[lastRunDate]] = await getSheetData(sheetName, "T2");
+
+    if (date === 28 && lastRunDate !== todayKey) {
+      // lastRunDate = todayKey; // Update the last run date to today's date
+      const monthsNames = [
+        "Jan",
+        "Feb",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "Aug",
+        "Sept",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+    
+      const year = tdate.getFullYear();
+      const lastTwoDigits = String(year).substring(2);
+      const currentMonth = tdate.getMonth(); // Months are 0-indexed
+
+      const currentData = monthsNames[currentMonth];
+      const nextData = monthsNames[currentMonth + 1];
+      const currentSheetName = `${currentData} ${lastTwoDigits}`;
+      const nextSheetName = `${nextData} ${lastTwoDigits}`;
+
+    
+      const data = await getSheetData(currentSheetName, "J10:O10"); // pass empty string for sheetName
+      const names = data.flat(); // Or: data.map(row => row[0]);
+
+      const rearranged = [...names.slice(2), names[1], names[0]];
+      // console.log("🚀 ~ router.post ~ rearranged:", rearranged);
+      await writeSheetData(nextSheetName, "J10", [rearranged]);
+
+      // Update the last run date in the sheet
+      await writeSheetData(nextSheetName, "T2", [[todayKey]]); // Update
+
+      console.log("Task completed: Bazar list set for");
+    }
+  } catch (error) {
+    console.error("Error setting bazar list:", error);
+  }
+    
+  
+
+  // End of functionality to set bazar list on 28th of every month
 
   if (!sheetName) {
     return res.status(400).json({ error: "Sheet name is required." });
@@ -433,44 +494,47 @@ router.get("/bazarlist", async (req, res) => {
 });
 
 // Set bazar list
-router.post("/bazarlist", async (req, res) => {
-  const monthsNames = [
-    "Jan",
-    "Feb",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+// Commented out because the normal cron job for vercel is use get functionality. So it handle by using get method
+// router.post("/bazarlist", async (req, res) => {
+//   console.log("Bazar list set for");
+//   const monthsNames = [
+//     "Jan",
+//     "Feb",
+//     "March",
+//     "April",
+//     "May",
+//     "June",
+//     "July",
+//     "Aug",
+//     "Sept",
+//     "Oct",
+//     "Nov",
+//     "Dec",
+//   ];
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const lastTwoDigits = String(year).substring(2);
-  const currentMonth = today.getMonth(); // Months are 0-indexed
+//   const today = new Date();
+//   const year = today.getFullYear();
+//   const lastTwoDigits = String(year).substring(2);
+//   const currentMonth = today.getMonth(); // Months are 0-indexed
 
-  const currentData = monthsNames[currentMonth];
-  const nextData = monthsNames[currentMonth + 1];
-  const currentSheetName = `${currentData} ${lastTwoDigits}`;
-  const nextSheetName = `${nextData} ${lastTwoDigits}`;
-  try {
-    const data = await getSheetData(currentSheetName, "J10:O10"); // pass empty string for sheetName
-    const names = data.flat(); // Or: data.map(row => row[0]);
+//   const currentData = monthsNames[currentMonth];
+//   const nextData = monthsNames[currentMonth + 1];
+//   const currentSheetName = `${currentData} ${lastTwoDigits}`;
+//   const nextSheetName = `${nextData} ${lastTwoDigits}`;
+//   try {
+//     const data = await getSheetData(currentSheetName, "J10:O10"); // pass empty string for sheetName
+//     const names = data.flat(); // Or: data.map(row => row[0]);
 
-    const rearranged = [...names.slice(2), names[1], names[0]];
-    // console.log("🚀 ~ router.post ~ rearranged:", rearranged);
-    await writeSheetData(nextSheetName, "J10", [rearranged]);
-      res.json({ success: true, message: `Bazar list set for ${nextSheetName}` });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Failed to retrieve data from Google Sheets" });
-  }
-});
+//     const rearranged = [...names.slice(2), names[1], names[0]];
+//     // console.log("🚀 ~ router.post ~ rearranged:", rearranged);
+//     await writeSheetData(nextSheetName, "J10", [rearranged]);
+//     console.log("Task completed: Bazar list set for");
+//       res.json({ success: true, message: `Bazar list set for ${nextSheetName}` });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ error: "Failed to retrieve data from Google Sheets" });
+//   }
+// });
 
 export default router;

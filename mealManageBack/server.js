@@ -19,26 +19,30 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-cron.schedule(
-  '00 14 28 * *',
-  async () => {
-    try {
-      console.log("Running API call on 28th...");
 
-      const response = await fetch("https://meal-manage-back.vercel.app/api/sheets/bazarlist", {
-        method: "POST",
-      });
+// This is not works on vercel, so commented out
 
-      const data = await response.json();
-      console.log("API call completed:");
-    } catch (error) {
-      console.error("Error during scheduled API call:", error.message);
-    }
-  },
-  {
-    timezone: 'Asia/Dhaka',
-  }
-);
+// cron.schedule(
+//   '42 23 29 * *',
+//   async () => {
+//     try {
+//       console.log("Running API call on 28th...");
+
+//       const response = await fetch("https://meal-manage-back.vercel.app/api/sheets/bazarlist", {
+//         method: "POST",
+//       });
+
+//       const data = await response.json();
+//       console.log("API call completed:");
+//     } catch (error) {
+//       console.error("Error during scheduled API call:", error.message);
+//     }
+//   },
+//   {
+//     timezone: 'Asia/Dhaka',
+//   }
+// );
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
