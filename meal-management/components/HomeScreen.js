@@ -140,8 +140,8 @@ function getCurrentAndNextPerson(date = new Date()) {
             <Text style={styles.cell}>{data.basicData.totalExtraSpend}</Text>
           </View>
           <View style={styles.tableRow}>
-            <Text style={styles.cell}>Babul Vai</Text>
-            <Text style={styles.cell}>{data.basicData.babulVai}</Text>
+            <Text style={styles.cell}>Dokan</Text>
+            <Text style={styles.cell}>{data.basicData.dokan}</Text>
           </View>
           <View style={styles.tableRow}>
             <Text style={styles.cell}>Per Meal Cost</Text>

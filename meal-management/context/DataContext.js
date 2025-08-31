@@ -22,7 +22,7 @@ export const DataProvider = ({ children }) => {
     "June",
     "July",
     "Aug",
-    "Sept",
+    "Sep",
     "Oct",
     "Nov",
     "Dec",
@@ -45,8 +45,9 @@ export const DataProvider = ({ children }) => {
     "Bazar",
     "Meal",
     "Extra Spend",
-    "Debit",
+    "Total Without Extra",
     "Total With Extra",
+    "Debit",
   ]);
   const [selectedData, setSelectedData] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState("Select Person");
@@ -65,12 +66,11 @@ export const DataProvider = ({ children }) => {
     const monthIndex = monthsNames.indexOf(currentData);
     const [selectedMonth, year] = selectedSheet.split(" ");
     const selectedMonthIndex = monthsNames.indexOf(selectedMonth);
-    
+
     return selectedMonthIndex > monthIndex || year > currentYearString ? -1 : 1;
   };
 
   useEffect(() => {
-
     const fetchSheets = async () => {
       setLoading(true);
       try {
@@ -96,7 +96,11 @@ export const DataProvider = ({ children }) => {
 
   // Fetch data when selectedSheet changes
   useEffect(() => {
-    if (!selectedSheet || selectedSheet === "Select Sheet" || checkMonth() === -1) {
+    if (
+      !selectedSheet ||
+      selectedSheet === "Select Sheet" ||
+      checkMonth() === -1
+    ) {
       setData(null);
       return;
     }
@@ -132,7 +136,11 @@ export const DataProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchPersonNames = async () => {
-      if (!selectedSheet || selectedSheet === "Select Sheet" || checkMonth() === -1) {
+      if (
+        !selectedSheet ||
+        selectedSheet === "Select Sheet" ||
+        checkMonth() === -1
+      ) {
         return;
       }
       setLoading(true);
@@ -153,39 +161,36 @@ export const DataProvider = ({ children }) => {
     fetchPersonNames();
   }, [selectedSheet]);
 
-  
-
-
   // Monthly Summary Functionality Start
 
   useEffect(() => {
     setLoading(true);
-  
+
     const fieldMap = {
       "Bazar": "totalBazar",
       "Meal": "totalMeal",
       "Extra Spend": "extraSpend",
-      "Debit": "debitCredit",
+      "Total Without Extra": "total",
       "Total With Extra": "totalExtra",
+      "Debit": "debitCredit",
     };
-  
+
     const field = fieldMap[selectedValue];
-  
+
     if (field) {
       const selected = { Name: "Amount" };
-  
-      personNames.slice(1).forEach(name => {
+
+      personNames.slice(1).forEach((name) => {
         selected[name] = data?.[name.toLowerCase()]?.[field];
       });
-  
+
       setSelectedData(selected);
     } else {
       setSelectedData(null);
     }
-  
+
     setLoading(false);
   }, [selectedValue, data]);
-  
 
   // Monthly Summary Functionality End
 
@@ -207,7 +212,10 @@ export const DataProvider = ({ children }) => {
     if (data) {
       const extraSpends = {};
       personNames.slice(1).forEach((name) => {
-        extraSpends[name] = data[name.toLowerCase()].extraSpend === '' ? '৳0.00' : data[name.toLowerCase()].extraSpend;
+        extraSpends[name] =
+          data[name.toLowerCase()].extraSpend === ""
+            ? "৳0.00"
+            : data[name.toLowerCase()].extraSpend;
       });
       setExtraSpends(extraSpends);
     }

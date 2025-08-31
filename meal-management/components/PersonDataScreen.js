@@ -170,6 +170,10 @@ export const PersonDataScreen = () => {
               <Text style={styles.cell}>{personData.total}</Text>
             </View>
             <View style={styles.tableRow}>
+              <Text style={styles.cell}>Extra Per Person</Text>
+              <Text style={styles.cell}>{data.basicData.extraPer}</Text>
+            </View>
+            <View style={styles.tableRow}>
               <Text style={styles.cell}>Total Cost With Extra</Text>
               <Text style={styles.cell}>{personData.totalExtra}</Text>
             </View>
