@@ -417,8 +417,11 @@ router.post("/bathroom", async (req, res) => {
 
 // Bazar List
 router.get("/bazarlist", async (req, res) => {
+  // console.log('log from bazarlist')
 
   const sheetName = req.query.sheetName;
+
+  // console.log(sheetName)
 
   // Functionality to set bazar list on 28th of every month
   // console.log('Hello from bazar list');
@@ -426,15 +429,21 @@ router.get("/bazarlist", async (req, res) => {
   const date = tdate.getDate();
   const todayKey = tdate.toDateString(); // e.g., "Sun Jun 30 2025"
 
-  // console.log(tdate, date);
+  // console.log(date, todayKey);
 
   try {
 
     // Get the last run date from the sheet
-    const [[lastRunDate]] = await getSheetData(sheetName, "T2");
+    let [[lastRunDate]] = await getSheetData(sheetName, "T2");
+
+    // console.log('LastRunDate', lastRunDate)
+    // console.log('TodayKey', todayKey)
+    // console.log(lastRunDate !== todayKey)
 
     if (date === 28 && lastRunDate !== todayKey) {
-      // lastRunDate = todayKey; // Update the last run date to today's date
+      // console.log('Hello from inside date check');
+      lastRunDate = todayKey; // Update the last run date to today's date
+      
       const monthsNames = [
         "Jan",
         "Feb",
@@ -459,9 +468,11 @@ router.get("/bazarlist", async (req, res) => {
       const currentSheetName = `${currentData} ${lastTwoDigits}`;
       const nextSheetName = `${nextData} ${lastTwoDigits}`;
 
-    
+    // console.log(currentSheetName)
       const data = await getSheetData(currentSheetName, "J10:O10"); // pass empty string for sheetName
       const names = data.flat(); // Or: data.map(row => row[0]);
+
+      // console.log(names)
 
       const rearranged = [...names.slice(2), names[1], names[0]];
       // console.log("🚀 ~ router.post ~ rearranged:", rearranged);
@@ -470,7 +481,7 @@ router.get("/bazarlist", async (req, res) => {
       // Update the last run date in the sheet
       await writeSheetData(nextSheetName, "T2", [[todayKey]]); // Update
 
-      console.log("Task completed: Bazar list set for");
+      console.log(`Task completed: Bazar list set for ${nextSheetName}`);
     }
   } catch (error) {
     console.error("Error setting bazar list:", error);
