@@ -419,6 +419,22 @@ router.post("/bathroom", async (req, res) => {
 router.get("/bazarlist", async (req, res) => {
   // console.log('log from bazarlist')
 
+  // months names array
+  const monthsNames = [
+    "Jan",
+    "Feb",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
   const sheetName = req.query.sheetName;
 
   // console.log(sheetName)
@@ -429,46 +445,40 @@ router.get("/bazarlist", async (req, res) => {
   const date = tdate.getDate();
   const todayKey = tdate.toDateString(); // e.g., "Sun Jun 30 2025"
 
+  // also check if the script has already run today
+
+  const upMonth = `${monthsNames[(tdate.getMonth() + 1) % 12]} ${String(
+    tdate.getFullYear()
+  ).substring(2)}`;
+
+  const checkUpMonth = (await getSheetData(upMonth, "T2"));
+
+  if (checkUpMonth.length > 0) {
+    console.log(`Bazar List is already set for ${upMonth}`);
+  } else {
+    console.log(`Setting Bazar List for ${upMonth}`);
+  }
+
   // console.log(date, todayKey);
 
   try {
-
     // Get the last run date from the sheet
     let [[lastRunDate]] = await getSheetData(sheetName, "T2");
 
-    // console.log('LastRunDate', lastRunDate)
-    // console.log('TodayKey', todayKey)
-    // console.log(lastRunDate !== todayKey)
-
-    if (date === 28 && lastRunDate !== todayKey) {
+    if (date === 28 && lastRunDate !== todayKey && checkUpMonth.length === 0) {
       // console.log('Hello from inside date check');
       lastRunDate = todayKey; // Update the last run date to today's date
-      
-      const monthsNames = [
-        "Jan",
-        "Feb",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-    
+
       const year = tdate.getFullYear();
       const lastTwoDigits = String(year).substring(2);
       const currentMonth = tdate.getMonth(); // Months are 0-indexed
 
       const currentData = monthsNames[currentMonth];
-      const nextData = monthsNames[currentMonth + 1];
+      const nextData = monthsNames[(currentMonth + 1) % 12];
       const currentSheetName = `${currentData} ${lastTwoDigits}`;
-      const nextSheetName = `${nextData} ${lastTwoDigits}`;
+      const nextSheetName = `${nextData} ${currentMonth === 11 ? String(year + 1).substring(2) : lastTwoDigits}`;
 
-    // console.log(currentSheetName)
+      // console.log(currentSheetName)
       const data = await getSheetData(currentSheetName, "J10:O10"); // pass empty string for sheetName
       const names = data.flat(); // Or: data.map(row => row[0]);
 
@@ -486,8 +496,6 @@ router.get("/bazarlist", async (req, res) => {
   } catch (error) {
     console.error("Error setting bazar list:", error);
   }
-    
-  
 
   // End of functionality to set bazar list on 28th of every month
 
