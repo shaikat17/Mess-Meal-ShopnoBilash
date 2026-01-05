@@ -107,7 +107,7 @@ export const DataProvider = ({ children }) => {
 
   // Fetch data when selectedSheet changes
   useEffect(() => {
-    console.log(checkMonth())
+    // console.log(checkMonth())
     if (
       !selectedSheet ||
       selectedSheet === "Select Sheet" ||
@@ -119,11 +119,11 @@ export const DataProvider = ({ children }) => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-console.log(selectedSheet)
+// console.log(selectedSheet)
       try {
         const response = await fetch(`${apiUrl}?sheetName=${selectedSheet}`);
 
-        console.log(response)
+        // console.log(response)
         if (!response.ok) {
           const errorText = await response.text(); // Get error message
           console.error("API error response:", errorText); // Debug: Print error
@@ -132,7 +132,7 @@ console.log(selectedSheet)
           );
         }
         const result = await response.json();
-        console.log('Hello from data')
+        // console.log('Hello from data')
         setData(result);
       } catch (error) {
         console.error("Fetch error:", error); // Debug: Print the error
