@@ -59,16 +59,27 @@ export const DataProvider = ({ children }) => {
   const [bazarListData, setBazarListData] = useState([]);
 
   const checkMonth = () => {
-    const currentMonth = today.getMonth(); // Months are 0-indexed
-    const currentYear = today.getFullYear();
-    const currentYearString = String(currentYear).substring(2);
-    const currentData = monthsNames[currentMonth];
-    const monthIndex = monthsNames.indexOf(currentData);
-    const [selectedMonth, year] = selectedSheet.split(" ");
-    const selectedMonthIndex = monthsNames.indexOf(selectedMonth);
+  const currentMonthIndex = today.getMonth(); // 0-11
+  const currentYearShort = parseInt(String(today.getFullYear()).substring(2)); // e.g., 26
 
-    return selectedMonthIndex > monthIndex || year > currentYearString ? -1 : 1;
-  };
+  // Split selectedSheet (e.g., "Jan 25")
+  const [selectedMonthName, selectedYearStr] = selectedSheet.split(" ");
+  const selectedMonthIndex = monthsNames.indexOf(selectedMonthName);
+  const selectedYear = parseInt(selectedYearStr);
+
+  // 1. If selected year is greater than current year, it's the future
+  if (selectedYear > currentYearShort) {
+    return -1;
+  }
+
+  // 2. If it's the same year, check if the selected month is ahead of current month
+  if (selectedYear === currentYearShort && selectedMonthIndex > currentMonthIndex) {
+    return -1;
+  }
+
+  // 3. Otherwise (Past year OR same year/past month), it's valid
+  return 1;
+};
 
   useEffect(() => {
     const fetchSheets = async () => {
@@ -96,6 +107,7 @@ export const DataProvider = ({ children }) => {
 
   // Fetch data when selectedSheet changes
   useEffect(() => {
+    console.log(checkMonth())
     if (
       !selectedSheet ||
       selectedSheet === "Select Sheet" ||
@@ -107,10 +119,11 @@ export const DataProvider = ({ children }) => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-
+console.log(selectedSheet)
       try {
         const response = await fetch(`${apiUrl}?sheetName=${selectedSheet}`);
 
+        console.log(response)
         if (!response.ok) {
           const errorText = await response.text(); // Get error message
           console.error("API error response:", errorText); // Debug: Print error
@@ -119,6 +132,7 @@ export const DataProvider = ({ children }) => {
           );
         }
         const result = await response.json();
+        console.log('Hello from data')
         setData(result);
       } catch (error) {
         console.error("Fetch error:", error); // Debug: Print the error
